@@ -14,6 +14,8 @@ const Navbar = () => {
   const [isMobile, setIsMobile] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activePath, setActivePath] = useState("/")
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
 
   useEffect(() => {
     setActivePath(window.location.pathname)
@@ -58,6 +60,16 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = debounce(() => {
       const scrollY = window.scrollY
+      
+      // Update visibility based on scroll direction
+      if (scrollY > lastScrollY && scrollY > 100) {
+        setIsVisible(false)
+      } else if (scrollY < lastScrollY) {
+        setIsVisible(true)
+      }
+      
+      setLastScrollY(scrollY)
+
       setScrollLevel(
         scrollY > 500 ? 4 : scrollY > 300 ? 3 : scrollY > 150 ? 2 : scrollY > 0 ? 1 : 0
       )
@@ -67,7 +79,7 @@ const Navbar = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [])
+  }, [lastScrollY])
 
   const sizeVariants: Record<number, { width: string }> = {
     0: { width: isMobile ? 'calc(100% - 2rem)' : '90%' },
@@ -83,8 +95,11 @@ const Navbar = () => {
         aria-label="Navigation"
         role="banner"
         layout={!isMobile}
-        initial={sizeVariants[0]}
-        animate={sizeVariants[scrollLevel]}
+        initial={{ ...sizeVariants[0], y: 0 }}
+        animate={{ 
+          ...sizeVariants[scrollLevel], 
+          y: isVisible ? 0 : -120 
+        }}
         className={cn(
           'fixed left-1/2 z-30 -translate-x-1/2 transform',
           'transition-all duration-300 ease-in-out',
