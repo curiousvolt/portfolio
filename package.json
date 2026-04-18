@@ -78,7 +78,7 @@
     "satori-html": "^0.3.2",
     "tailwind-merge": "^3.3.1",
     "typescript": "^5.9.2",
-    "vite": "^8.0.8"
+    "vite": "^6.4.2"
   },
   "devDependencies": {
     "@types/lodash.debounce": "^4.0.9",
