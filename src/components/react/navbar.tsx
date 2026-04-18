@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
 import Link from './link'
 import ThemeToggle from './theme-toggle'
 import { NAV_LINKS, SITE } from '../../consts'
@@ -10,12 +10,20 @@ import { Menu, X } from 'lucide-react'
 import { Separator } from '../ui/separator'
 
 const Navbar = () => {
-  const [scrollLevel, setScrollLevel] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activePath, setActivePath] = useState("/")
-  const [isVisible, setIsVisible] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
+  const [hidden, setHidden] = useState(false)
+  const { scrollY } = useScroll()
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0
+    if (latest > previous && latest > 150) {
+      setHidden(true)
+    } else {
+      setHidden(false)
+    }
+  })
 
   useEffect(() => {
     setActivePath(window.location.pathname)
@@ -57,54 +65,23 @@ const Navbar = () => {
     }
   }, [mobileMenuOpen])
 
-  useEffect(() => {
-    const handleScroll = debounce(() => {
-      const scrollY = window.scrollY
-      
-      // Update visibility based on scroll direction
-      if (scrollY > lastScrollY && scrollY > 100) {
-        setIsVisible(false)
-      } else if (scrollY < lastScrollY) {
-        setIsVisible(true)
-      }
-      
-      setLastScrollY(scrollY)
 
-      setScrollLevel(
-        scrollY > 500 ? 4 : scrollY > 300 ? 3 : scrollY > 150 ? 2 : scrollY > 0 ? 1 : 0
-      )
-    }, 50)
-
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [lastScrollY])
-
-  const sizeVariants: Record<number, { width: string }> = {
-    0: { width: isMobile ? 'calc(100% - 2rem)' : '90%' },
-    1: { width: isMobile ? 'calc(100% - 2rem)' : '85%' },
-    2: { width: isMobile ? 'calc(100% - 2rem)' : '75%' },
-    3: { width: isMobile ? 'calc(100% - 2rem)' : '65%' },
-    4: { width: isMobile ? 'calc(100% - 2rem)' : '50%' },
-  }
 
   return (
     <>
       <motion.header
         aria-label="Navigation"
         role="banner"
-        layout={!isMobile}
-        initial={{ ...sizeVariants[0], y: 0 }}
-        animate={{ 
-          ...sizeVariants[scrollLevel], 
-          y: isVisible ? 0 : -120 
+        variants={{
+          visible: { y: 0 },
+          hidden: { y: -150 },
         }}
+        animate={hidden ? "hidden" : "visible"}
+        transition={{ duration: 0.35, ease: "easeInOut" }}
         className={cn(
           'fixed left-1/2 z-30 -translate-x-1/2 transform',
-          'transition-all duration-300 ease-in-out',
           'rounded-full backdrop-blur-xl border border-foreground/20 bg-background/60 shadow-lg',
-          'top-2 lg:top-4 xl:top-6'
+          'top-4 lg:top-6 w-[calc(100%-2rem)] md:w-[75%] lg:w-[60%] xl:w-[50%]'
         )}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 py-3 px-6 sm:p-4">
