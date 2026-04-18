@@ -7,6 +7,7 @@ import Head from '@/components/Head.astro'
 import Navbar from '@/components/react/navbar'
 import { SITE } from '@/consts'
 import { cn } from '@/lib/utils'
+import SpeedInsights from "@vercel/speed-insights/astro"
 
 const {
   isWide = false
@@ -64,6 +65,7 @@ const {
         </div>
       </main>
       <Footer />
+      <SpeedInsights />
     </div>
   </body>
 </html>
