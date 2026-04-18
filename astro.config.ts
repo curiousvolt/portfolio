@@ -46,7 +46,7 @@ function rehypeDemoteH1AndStripTitle() {
 }
 
 export default defineConfig({
-  site: 'https://www.cojocarudavid.me',
+  site: 'https://www.curiousvolt.me',
 
   integrations: [expressiveCode({
     themes: ['catppuccin-latte', 'ayu-dark'],

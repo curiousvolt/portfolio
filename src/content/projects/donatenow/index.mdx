@@ -1,0 +1,30 @@
+---
+name: 'DonateNow'
+description: 'A full-stack web application for managing donations to NGOs with PayPal integration, user authentication, email verification, and a comprehensive admin dashboard.'
+tags: ['react', 'node', 'mongodb', 'typescript', 'paypal']
+image: './donatenow.png'
+link: 'https://github.com/curiousvolt/donatenow'
+startDate: '2023-01-01'
+endDate: '2023-05-01'
+---
+
+## Overview
+
+DonateNow is a full-stack web application for managing donations to NGOs with PayPal integration, user authentication, email verification, and a comprehensive admin dashboard.
+
+## 🌟 Key Features
+
+### Custom PayPal Integration
+Allows donors to seamlessly and securely issue transactions directly to the NGO using PayPal Live and Sandbox modes. Each transaction is recorded and mapped properly within the MongoDB database.
+
+### Admin Dashboard & Campaign Tracking
+A full-featured Admin panel built using Recharts for data visualization. Tracks campaign goals, current fundraising progress, user management. Supports dynamic CSV generation to export user and donation data for accounting purposes.
+
+### Secure User Authentication
+End-to-end user authentication utilizing JSON Web Tokens (JWT). Includes OTP-based Email Verification handled via Nodemailer. Password management allows for secure resets through uniquely generated and short-lived OTP tokens.
+
+## 🏗 Tech Stack
+
+- **Frontend**: React 18+ with TypeScript, Vite, Tailwind CSS, Recharts, jsPDF for downloading donation receipts.
+- **Backend**: Node.js, Express, TypeScript, MongoDB with Mongoose ODM, JWT, bcryptjs, Nodemailer.
+- **Security**: Rate Limiting, Server-side Input Validation, XSS Protection, CORS setup.

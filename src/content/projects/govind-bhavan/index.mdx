@@ -1,0 +1,33 @@
+---
+name: 'Govind Bhavan Portal'
+description: 'A robust, full-stack student management system engineered for high-performance residential governance.'
+tags: ['react', 'node', 'mongodb', 'tailwind']
+image: './homepage_hero.png'
+link: 'https://github.com/curiousvolt/govind-bhavan'
+startDate: '2023-08-01'
+endDate: '2023-12-01'
+---
+
+## Overview
+
+The Govind Bhavan Portal is a robust, full-stack student management system engineered for high-performance residential governance.
+
+## 🏗 Architecture & Design Patterns
+
+The portal is built using a decoupled, full-stack architecture designed for scalability, security, and maintainable state management. 
+
+- **Backend**: Node.js Express server providing a RESTful API layer with Mongoose for MongoDB data modeling.
+- **Frontend**: React 19 optimized with Vite for lightning-fast HMR and low-latency production builds.
+- **Styling**: Tailwind CSS v4 utilizing a custom tokens-based design system for UI consistency.
+- **State Management**: Atomic React Context providers segmented by domain (Auth, Mess, Student Data).
+
+## 🚀 Key Technical Features
+
+### 🔐 Security & Role-Based Access (RBAC)
+- **Granular Scoping**: All API endpoints and frontend views are strictly scoped based on the authenticated user's role (`Admin` vs. `Student`) and unique MongoDB `_id`.
+- **Validation**: Mission-critical data mutations (Guest Bookings, Mess Rebates, Event Registration) are protected by server-side Zod validators to ensure business logic integrity.
+
+### 📊 Data Intelligence & Management
+- **Enterprise CSV Export**: A custom-built serialization utility leveraging the `file-saver` engine to bypass cross-browser blob restrictions, ensuring clean, formatted data exports.
+- **Dynamic Mess Management**: A rating-weighted dining system allowing students to provide real-time sentiment analysis for daily meals.
+- **Event Orchestration**: High-concurrency event registration system with real-time capacity monitoring and automated expiry tracking.

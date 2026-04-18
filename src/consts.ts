@@ -1,14 +1,14 @@
 import type { IconMap, SocialLink, Site } from '@/types'
 
 export const SITE: Site = {
-  title: 'Cojocaru David',
+  title: 'CuriousVolt',
   description:
-    "Junior Full Stack Developer specializing in modern web technologies. Expert in React, Node.js, TypeScript, and cloud development. Read my latest tech tutorials, project insights, and programming tips on web development, DevOps, and software engineering best practices.",
-  href: 'https://www.cojocarudavid.me',
-  author: 'Cojocaru David',
+    "I’m an electrical engineer—or so I’m told. That’s the “Volt.” The “Curious” part is me poking my nose into everything else, experimenting, breaking things, and learning along the way. This is what I’ve picked up from doing, not just academics.",
+  href: 'https://www.curiousvolt.is-a.dev',
+  author: 'Aman Kumar',
   locale: 'en-US',
-  location: 'Romania',
-  email: 'contact@cojocarudavid.me'
+  location: 'India',
+  email: 'itscuriousvolt@gmail.com'
 }
 
 export const NAV_LINKS: SocialLink[] = [
@@ -28,19 +28,19 @@ export const NAV_LINKS: SocialLink[] = [
 
 export const SOCIAL_LINKS: SocialLink[] = [
   {
-    href: 'https://github.com/cojocaru-david?ref=personal-website',
+    href: 'https://github.com/CuriousVolt?ref=personal-website',
     label: 'GitHub',
   },
   {
-    href: 'mailto:contact@cojocarudavid.me',
+    href: 'mailto:itscuriousvolt@gmail.com',
     label: 'Email',
   },
   {
-    href: 'tel:+40764132266',
+    href: 'tel:+919034692930',
     label: 'Phone',
   },
   {
-    href: 'https://www.instagram.com/david._.cojo?ref=personal-website',
+    href: 'https://www.instagram.com/curiousvolt?ref=personal-website',
     label: 'Instagram',
   },
   {
@@ -64,55 +64,43 @@ export interface Category {
 }
 
 export type Technologies = {
-  'Web Development': Category[]
+  'Artificial Intelligence & Machine Learning': Category[]
+  'Data Science': Category[]
+  'Programming Languages': Category[]
+  'Algorithms & Data Structures': Category[]
+  'Cloud & Deployment': Category[]
   'Development Tools': Category[]
-  'Hosting and Cloud Services': Category[]
-  'Operating Systems': Category[]
-  'Other Programming Languages and Technologies': Category[]
-  'Web Servers': Category[]
-  Databases: Category[]
-  'Other Software': Category[]
 }
 
 export const technologies: Technologies = {
-  'Web Development': [
-    { text: 'HTML', logo: 'mdi:language-html5' },
-    { text: 'JavaScript', logo: 'mdi:language-javascript' },
-    { text: 'CSS', logo: 'mdi:language-css3' },
-    { text: 'PHP', logo: 'mdi:language-php' },
-    { text: 'Astro', logo: 'simple-icons:astro' },
-    { text: 'Tailwind CSS', logo: 'mdi:tailwind' },
+  'Artificial Intelligence & Machine Learning': [
+    { text: 'AI Models', logo: 'mdi:robot-outline' },
+    { text: 'Generative AI', logo: 'mdi:creation-outline' },
   ],
+
+  'Data Science': [
+    { text: 'Data Science', logo: 'mdi:database' },
+    { text: 'Data Analysis', logo: 'mdi:chart-line' },
+  ],
+
+  'Programming Languages': [
+    { text: 'Python', logo: 'mdi:language-python' },
+    { text: 'C++', logo: 'mdi:language-cpp' },
+  ],
+
+  'Algorithms & Data Structures': [
+    { text: 'Algorithms', logo: 'mdi:graph-outline' },
+    { text: 'Data Structures', logo: 'mdi:sitemap-outline' },
+    { text: 'Optimization', logo: 'mdi:tune-variant' },
+  ],
+
+  'Cloud & Deployment': [
+    { text: 'Google Cloud', logo: 'simple-icons:googlecloud' },
+  ],
+
   'Development Tools': [
-    { text: 'Visual Studio Code', logo: 'mdi:visual-studio-code' },
     { text: 'Git', logo: 'mdi:git' },
-  ],
-  'Hosting and Cloud Services': [
-    { text: 'DigitalOcean', logo: 'mdi:digital-ocean' },
-    { text: 'Cloudflare', logo: 'cib:cloudflare' },
-    { text: 'Netlify', logo: 'cib:netlify' },
-  ],
-  'Operating Systems': [
-    { text: 'Windows', logo: 'mdi:windows' },
-    { text: 'Ubuntu', logo: 'mdi:ubuntu' },
-  ],
-  'Other Programming Languages and Technologies': [
-    { text: 'Lua', logo: 'mdi:language-lua' },
-    { text: 'Golang', logo: 'mdi:language-go' },
-    { text: 'Node.js', logo: 'mdi:nodejs' },
-  ],
-  'Web Servers': [
-    { text: 'Apache', logo: 'cib:apache' },
-    { text: 'Nginx', logo: 'cib:nginx' },
-  ],
-  Databases: [
-    { text: 'MySQL', logo: 'cib:mysql' },
-    { text: 'MongoDB', logo: 'cib:mongodb' },
-  ],
-  'Other Software': [
-    { text: 'Discord', logo: 'mdi:discord' },
-    { text: 'Spotify', logo: 'mdi:spotify' },
-    { text: 'Visual Studio', logo: 'mdi:visual-studio' },
-    { text: 'Brave', logo: 'cib:brave' },
+    { text: 'Linux', logo: 'mdi:linux' },
+    { text: 'Visual Studio Code', logo: 'mdi:visual-studio-code' },
   ],
 }

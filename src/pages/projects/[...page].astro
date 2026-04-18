@@ -1,7 +1,6 @@
 ---
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import PageHead from '@/components/PageHead.astro'
-import BuyMeCoffee from '@/components/react/buymeacoffe'
 import PaginationComponent from '@/components/ui/pagination'
 import Layout from '@/layouts/Layout.astro'
 import { getAllProjects } from '@/lib/data-utils'
@@ -31,26 +30,22 @@ const currentUrl = Astro.url;
     ]}
   />
 
-  <section class="max-screen mt-12 px-4 md:px-6">
-    <div class="flex flex-row items-center justify-between mb-8">
+  <section class="mt-12 animate-fade-in-up">
       <div>
-          <div class="flex w-fit items-center gap-2 text-primary">
+          <div class="flex w-fit items-center gap-x-2 text-primary">
             <Icon name="lucide:star" class="h-4 w-4 text-yellow-500 animate-pulse" />
-            <p class="shimmer word-spacing font-mono text-sm uppercase leading-none text-primary">My Work</p>
+            <p class="shimmer font-mono text-sm uppercase leading-none text-primary tracking-widest bg-clip-text">My Work</p>
           </div>
           <h2
             id="skills-title"
-            class="font-custom text-foreground text-4xl font-bold mt-2"
+            class="font-custom text-foreground text-4xl font-bold mt-4"
           >
             Projects
           </h2>
-          <p class="text-muted-foreground text-md max-w-2xl mt-3">
-            Here are some of the projects I have worked on. I am always looking for new challenges and opportunities to learn and grow as a developer. If you have a project in mind, feel free to reach out!
+          <p class="text-muted-foreground text-md max-w-2xl mt-4 leading-relaxed">
+            Things I've built along the way. Experiments, ideas, and projects worth trying out.
           </p>
       </div>
-      <div>
-        <BuyMeCoffee />
-      </div>  
     </div>
   
     <div class="mt-12 grid grid-cols-1 py-sm sm:grid-cols-2 gap-x-8 mb-16 gap-y-8">

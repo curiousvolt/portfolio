@@ -25,8 +25,24 @@ import {
   SiDiscord,
   SiSpotify,
   SiBrave,
+  SiLinux,
+  SiPython,
+  SiCplusplus,
+  SiGooglecloud,
+  SiGooglegemini,
 } from 'react-icons/si'
-import { FileCode, LucideAppWindow, Code } from 'lucide-react'
+import {
+  FileCode,
+  LucideAppWindow,
+  Code,
+  Bot,
+  Sparkles,
+  Database,
+  TrendingUp,
+  Network,
+  Workflow,
+  Sliders
+} from 'lucide-react'
 
 const iconMap: { [key: string]: IconType } = {
   'mdi:language-html5': SiHtml5,
@@ -53,6 +69,17 @@ const iconMap: { [key: string]: IconType } = {
   'mdi:visual-studio-code': FileCode,
   'mdi:windows': LucideAppWindow,
   'mdi:visual-studio': Code,
+  'mdi:robot-outline': Bot,
+  'mdi:creation-outline': SiGooglegemini,
+  'mdi:database': Database,
+  'mdi:chart-line': TrendingUp,
+  'mdi:language-python': SiPython,
+  'mdi:language-cpp': SiCplusplus,
+  'mdi:graph-outline': Network,
+  'mdi:sitemap-outline': Workflow,
+  'mdi:tune-variant': Sliders,
+  'simple-icons:googlecloud': SiGooglecloud,
+  'mdi:linux': SiLinux,
 }
 
 const categories = Object.keys(technologies)
@@ -76,31 +103,33 @@ const Skills: React.FC = () => {
         {categoryGroups.map((group, groupIndex) => (
           <InfiniteScroll
             key={groupIndex}
-            duration={50000}
+            duration={150000}
             direction={groupIndex % 2 === 0 ? 'normal' : 'reverse'}
             showFade={true}
             className="flex flex-row justify-center"
           >
-            {group.flatMap((category) =>
-              technologies[category as keyof Technologies].map(
-                (tech: Category, techIndex: number) => {
-                  const IconComponent = iconMap[tech.logo] || FaQuestionCircle
-                  return (
-                    <div
-                      key={`${category}-${techIndex}`}
-                      className="tech-badge repo-card border-border bg-card text-muted-foreground mr-5 flex items-center gap-3 rounded-full border p-3 shadow-sm backdrop-blur-sm transition-all duration-300 hover:shadow-md"
-                      data-tech-name={`${category}-${techIndex}`}
-                    >
-                      <span className="bg-muted flex h-10 w-10 items-center justify-center rounded-full p-2 text-lg shadow-inner">
-                        <IconComponent className="tech-icon text-primary" />
-                      </span>
-                      <span className="text-foreground font-medium">
-                        {tech.text}
-                      </span>
-                    </div>
-                  )
-                },
-              ),
+            {[...Array(6)].flatMap((_, arrayIndex) =>
+              group.flatMap((category) =>
+                technologies[category as keyof Technologies].map(
+                  (tech: Category, techIndex: number) => {
+                    const IconComponent = iconMap[tech.logo] || FaQuestionCircle
+                    return (
+                      <div
+                        key={`${category}-${techIndex}-${arrayIndex}`}
+                        className="tech-badge repo-card border-border bg-card text-muted-foreground mr-5 flex items-center gap-3 rounded-full border p-3 shadow-sm backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:scale-105 hover:border-primary/30 hover:bg-card/90"
+                        data-tech-name={`${category}-${techIndex}`}
+                      >
+                        <span className="bg-muted flex h-10 w-10 items-center justify-center rounded-full p-2 text-lg shadow-inner">
+                          <IconComponent className="tech-icon text-primary" />
+                        </span>
+                        <span className="text-foreground font-medium">
+                          {tech.text}
+                        </span>
+                      </div>
+                    )
+                  },
+                ),
+              )
             )}
           </InfiniteScroll>
         ))}

@@ -32,7 +32,7 @@ function cleanupHeading(text: string): string {
 
 <details
   open
-  class="group col-start-2 rounded-xl border p-4 xl:sticky xl:top-26 xl:col-start-1 xl:mr-8 xl:ml-auto xl:h-[calc(100vh-5rem)] xl:max-w-fit xl:rounded-none xl:border-none xl:p-0"
+  class="group rounded-xl border p-4 xl:max-w-fit xl:rounded-none xl:border-none xl:p-0"
 >
   <summary
     class="flex cursor-pointer items-center justify-between text-xl font-medium group-open:pb-4"
@@ -74,7 +74,7 @@ function cleanupHeading(text: string): string {
           >
             <a
               href={`#${heading.slug}`}
-              class="marker:text-foreground/30 block list-disc px-3 py-2 underline decoration-transparent underline-offset-[3px] transition-colors duration-200 hover:decoration-inherit xl:list-none"
+              class="marker:text-foreground/30 block list-disc px-3 py-1.5 text-foreground/60 transition-all duration-200 hover:text-foreground hover:translate-x-0.5 xl:list-none"
               aria-label={`Scroll to ${heading.text}`}
               title={`Scroll to ${heading.text}`}
             >

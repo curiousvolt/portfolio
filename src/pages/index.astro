@@ -14,21 +14,21 @@ const currentUrl = Astro.url;
 ---
 
 <Layout canonicalUrl={currentUrl}>
-  <PageHead slot="head" title="Junior Full Stack Developer" />
-  <section class="flex flex-col gap-y-12 px-4 py-8 sm:px-8 lg:px-16">
+  <PageHead slot="head" title="Aman" />
+  <section class="flex flex-col gap-y-12 py-8">
     <div
-      class="flex flex-col items-center text-center sm:flex-row sm:items-start sm:gap-8 sm:text-left"
+      class="flex flex-col items-center text-center sm:flex-row sm:items-start sm:gap-8 sm:text-left animate-fade-in-up"
     >
-      <div class="relative overflow-hidden rounded-lg sm:shrink-0 sm:overflow-hidden sm:rounded-lg">
+      <div class="relative sm:shrink-0">
         <Logo
-          className="h-auto w-40 object-cover sm:w-48 md:w-56 lg:w-64 "
+          className="h-auto w-36 object-cover sm:w-44 md:w-52 lg:w-56"
         />
       </div>
       <div class="mt-8 sm:mt-0 sm:max-w-xl">
         <h1
           class="font-custom text-foreground text-start text-4xl font-extrabold sm:text-5xl"
         >
-          {SITE.title}
+          {SITE.author}
         </h1>
         <div class="mt-4 flex items-center gap-2" aria-label="location">
           <span
@@ -38,23 +38,7 @@ const currentUrl = Astro.url;
           </span>
           <span class="flex items-center gap-1">
             <span class="text-foreground text-sm font-medium"> {SITE.location}</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 51.18 38.4"
-              class="h-6 w-6 transition-transform duration-500 hover:rotate-12"
-              aria-hidden="true"
-              role="img"
-              focusable="false"
-              aria-labelledby="title"
-            >
-              <path
-                d="M17.75 0v38.4H3.03C1.37 38.4 0 37.04 0 35.37V3.03C0 1.36 1.37 0 3.03 0h14.72z"
-                fill="#002b7f"></path>
-              <path fill="#fcd116" d="M37.45 0v38.4h-19.7V0h19.7z"></path>
-              <path
-                d="M37.45 38.4V0h14.72c1.67 0 3.03 1.36 3.03 3.03v32.33c0 1.67-1.37 3.03-3.03 3.03H37.45v.01z"
-                fill="#ce1126"></path>
-            </svg>
+            <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="h-6 w-6 transition-transform duration-500 hover:rotate-12" preserveAspectRatio="xMidYMid meet" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#138808" d="M0 27a4 4 0 0 0 4 4h28a4 4 0 0 0 4-4v-4H0v4z"></path><path fill="#EEE" d="M0 13h36v10H0z"></path><path fill="#F93" d="M36 13V9a4 4 0 0 0-4-4H4a4 4 0 0 0-4 4v4h36z"></path><circle fill="navy" cx="18" cy="18" r="4"></circle><circle fill="#EEE" cx="18" cy="18" r="3"></circle><path fill="#6666B3" d="M18 15l.146 2.264l1.001-2.035l-.73 2.147l1.704-1.498l-1.497 1.705l2.147-.731l-2.035 1.002L21 18l-2.264.146l2.035 1.001l-2.147-.73l1.497 1.704l-1.704-1.497l.73 2.147l-1.001-2.035L18 21l-.146-2.264l-1.002 2.035l.731-2.147l-1.705 1.497l1.498-1.704l-2.147.73l2.035-1.001L15 18l2.264-.146l-2.035-1.002l2.147.731l-1.498-1.705l1.705 1.498l-.731-2.147l1.002 2.035z"></path><circle fill="navy" cx="18" cy="18" r="1"></circle></g></svg>
           </span>
         </div>
         <p class="text-md text-foreground mt-4 text-start font-sans" title="description" aria-label="description">
@@ -63,7 +47,7 @@ const currentUrl = Astro.url;
       </div>
     </div>
 
-    <section class="relative" aria-labelledby="skills-title">
+    <section class="relative animate-fade-in-up delay-200" aria-labelledby="skills-title">
       <h2
         id="skills-title"
         class="font-custom text-foreground text-2xl font-bold"
@@ -81,7 +65,7 @@ const currentUrl = Astro.url;
       </div>
     </section>
 
-    <section class="flex flex-col gap-y-4" aria-labelledby="latest-posts-title" role="region">
+    <section class="flex flex-col gap-y-4 animate-fade-in-up delay-400" aria-labelledby="latest-posts-title" role="region">
       <div class="relative" aria-labelledby="latest-posts-title">
         <h2
           id="latest-posts-title"

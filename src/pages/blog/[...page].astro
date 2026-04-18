@@ -31,21 +31,21 @@ const currentUrl = Astro.url;
       { label: `Page ${page.currentPage}`, icon: 'lucide:folder-open' },
     ]}
   />
-  <section class="max-screen mt-12 px-4 md:px-6">
-    <div class="flex w-fit items-center gap-2 text-primary">
+  <section class="mt-12 animate-fade-in-up">
+    <div class="flex w-fit items-center gap-x-2 text-primary">
         <Icon class="h-4 w-4 text-secondary-foreground animate-pulse" name="lucide:brain" />
-        <p class="shimmer word-spacing font-mono text-sm uppercase leading-none text-secondary-foreground">
+        <p class="shimmer font-mono text-sm uppercase leading-none text-secondary-foreground tracking-widest bg-clip-text">
           Quick Thoughts
         </p>
     </div>
     <h2
     id="skills-title"
-    class="font-custom text-foreground text-4xl font-bold mt-2"
+    class="font-custom text-foreground text-4xl font-bold mt-4"
     >
       Blog
     </h2>
-    <p class="text-muted-foreground text-md max-w-2xl mt-3">
-      Welcome to my blog! Here, I share AI generated content, tutorials, and insights on various topics. I hope you find the information helpful and engaging. If you have any questions or suggestions, feel free to reach out!
+    <p class="text-muted-foreground text-md max-w-2xl mt-4 leading-relaxed">
+      Expect the unexpected. This blog is a collection of experiments, strange ideas, and technologies worth taking apart. Some posts explore new tools, some question the hype — all of them come from a simple curiosity about how modern technology actually works.
     </p>
 
     <div class="flex min-h-[calc(100vh-18rem)] flex-col gap-y-8 my-12">
