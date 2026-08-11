@@ -41,9 +41,6 @@ export const LogCard = ({ log, compactMobile = false }: { log: CollectionEntry<'
   return (
     <a href={`/logs/${log.id}`} className="block group p-4 rounded-2xl border border-border/50 bg-card/20 hover:bg-secondary/30 hover:border-border/80 transition-all duration-300 relative overflow-hidden">
       
-      {/* Dynamic Background Animation */}
-      {renderAnimation(visuals.icon, visuals.hex)}
-
       {/* Top Row: Icon + Badges */}
       <div className="flex items-center gap-3 mb-3 relative z-10">
         <IconComponent size={20} className={`${visuals.colorClass} shrink-0`} strokeWidth={2} />
@@ -60,12 +57,12 @@ export const LogCard = ({ log, compactMobile = false }: { log: CollectionEntry<'
       </div>
 
       {/* Title */}
-      <h3 className="relative z-10 text-base font-mono font-bold text-foreground mb-1 pr-8 group-hover:text-primary transition-colors duration-200">
+      <h3 className="relative z-10 text-base font-mono font-bold text-foreground mb-1 sm:pr-8 group-hover:text-primary transition-colors duration-200">
         {data.title}
       </h3>
 
       {/* Description */}
-      <p className={`relative z-10 text-sm leading-relaxed text-muted-foreground line-clamp-2 pr-8 ${compactMobile ? 'hidden sm:block' : ''}`}>
+      <p className={`relative z-10 text-sm leading-relaxed text-muted-foreground line-clamp-2 sm:pr-8 ${compactMobile ? 'hidden sm:block' : ''}`}>
         {data.description}
       </p>
 
