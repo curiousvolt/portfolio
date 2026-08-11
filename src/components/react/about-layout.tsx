@@ -23,8 +23,8 @@ export const AboutContent = ({
   const [activeTab, setActiveTab] = useState<'side' | 'github'>('side')
   const [repos, setRepos] = useState<GitHubRepo[]>([])
   const [loading, setLoading] = useState(true)
-  const [totalStars, setTotalStars] = useState(0)
-  const [totalForks, setTotalForks] = useState(0)
+  const [totalStars, setTotalStars] = useState<number | string>(0)
+  const [totalForks, setTotalForks] = useState<number | string>(0)
   const [graphSvg, setGraphSvg] = useState<string | null>(initialGraphSvg || null)
 
   useEffect(() => {
@@ -68,6 +68,8 @@ export const AboutContent = ({
         console.error('Error fetching github data', error)
         // Fallback to static repos if rate limited
         setRepos(GITHUB_REPOS)
+        setTotalStars('3.2k+')
+        setTotalForks('600+')
       } finally {
         setLoading(false)
       }
