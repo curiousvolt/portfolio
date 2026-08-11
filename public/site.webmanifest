@@ -3,7 +3,7 @@
   "short_name": "CuriousVolt",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/logo.png?v=2",
       "sizes": "1000x1000",
       "type": "image/png",
       "purpose": "any maskable"
