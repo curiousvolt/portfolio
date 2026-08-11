@@ -60,7 +60,7 @@ export const LogCard = ({ log, compactMobile = false }: { log: CollectionEntry<'
       </div>
 
       {/* Title */}
-      <h3 className="relative z-10 text-xl font-medium text-foreground mb-2 pr-8 group-hover:text-primary transition-colors duration-300">
+      <h3 className="relative z-10 text-lg sm:text-xl font-mono font-medium text-foreground mb-2 pr-8 group-hover:text-primary transition-colors duration-300">
         {data.title}
       </h3>
 
