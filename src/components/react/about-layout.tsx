@@ -34,7 +34,7 @@ export const AboutContent = ({
       <div className="flex justify-between items-center w-full mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
         <div className="flex items-center gap-3 sm:gap-4">
           <div className="w-12 h-12 sm:w-20 sm:h-20 shrink-0 rounded-full overflow-hidden bg-secondary border border-border/50">
-             <img src="/me.jpg" alt={SITE.author} className="w-full h-full object-cover" />
+             <img src="/me.jpg" alt={SITE.author} fetchpriority="high" loading="eager" decoding="async" className="w-full h-full object-cover" />
           </div>
           <h1 className="font-custom text-2xl sm:text-4xl font-bold tracking-tight">{SITE.author}</h1>
         </div>

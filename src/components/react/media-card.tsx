@@ -7,7 +7,7 @@ export const MediaCard = ({ item }: { item: CollectionEntry<'media'> }) => {
     <a href={data.url} target="_blank" rel="noopener noreferrer" className="block group w-48 sm:w-56 shrink-0 cursor-pointer text-left">
       {/* Image container with bottom-right circular cutout */}
       <div className="relative w-full aspect-[4/5] rounded-[20px] rounded-br-none overflow-hidden bg-secondary/30 mb-4 transition-all duration-500">
-        <img src={data.image.src} alt={data.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        <img src={data.image.src} alt={data.title} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         
         {/* Exact CSS trick from user's snippet */}
         <style>{`

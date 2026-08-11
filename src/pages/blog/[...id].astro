@@ -77,9 +77,9 @@ const canonicalUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
 
             <div class="my-6 rounded-xl overflow-hidden w-full aspect-video border border-border/50 bg-muted">
               {post.data.image ? (
-                <Image src={post.data.image} alt={post.data.title} class="w-full h-full object-cover" format="webp" />
+                <Image src={post.data.image} alt={post.data.title} class="w-full h-full object-cover" format="webp" fetchpriority="high" loading="eager" decoding="async" />
               ) : (
-                <img src="https://images.unsplash.com/photo-1550439062-609e1531270e?q=80&w=2070&auto=format&fit=crop" alt={post.data.title} class="w-full h-full object-cover" />
+                <img src="https://images.unsplash.com/photo-1550439062-609e1531270e?q=80&w=2070&auto=format&fit=crop" alt={post.data.title} fetchpriority="high" loading="eager" decoding="async" class="w-full h-full object-cover" />
               )}
             </div>
 

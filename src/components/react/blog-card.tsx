@@ -15,6 +15,8 @@ const BlogCardJSX = ({ entry, variant = "list" }: { entry: CollectionEntry<'blog
           <img
             alt={entry.data.title}
             src={entry.data.image?.src || TEMP_IMAGE}
+            loading="lazy"
+            decoding="async"
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
@@ -58,6 +60,8 @@ const BlogCardJSX = ({ entry, variant = "list" }: { entry: CollectionEntry<'blog
           <img
             alt={entry.data.title}
             src={entry.data.image?.src || TEMP_IMAGE}
+            loading="lazy"
+            decoding="async"
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
