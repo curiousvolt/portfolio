@@ -36,7 +36,6 @@ import {
   LucideAppWindow,
   Code,
   Bot,
-  Sparkles,
   Database,
   TrendingUp,
   Network,

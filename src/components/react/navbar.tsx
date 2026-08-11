@@ -162,7 +162,7 @@ const Navbar = () => {
           >
             <div className="flex flex-col items-center justify-start h-full pt-24 w-full p-6">
               <nav className="flex flex-col items-center justify-start gap-1 w-full">
-                {NAV_LINKS.map((item, i) => (
+                {NAV_LINKS.map((item) => (
                   <div
                     key={item.href}
                     className="w-full text-start"

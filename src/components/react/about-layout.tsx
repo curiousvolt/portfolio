@@ -5,18 +5,16 @@ import { MediaCard } from './media-card'
 import { SITE, GITHUB_REPOS } from '@/consts'
 import type { GitHubRepo } from '@/consts'
 import type { CollectionEntry } from 'astro:content'
-import { Folder, Github, Mail, Star, GitFork, Loader2, Twitter, FileText } from 'lucide-react'
+import { Folder, Github, Mail, FileText, Star, GitFork, Loader2 } from 'lucide-react'
 
 
 
 export const AboutContent = ({ 
   initialGraphSvg, 
-  logs, 
-  sideProjects, 
-  media 
+  sideProjects,
+  media
 }: { 
   initialGraphSvg?: string | null,
-  logs: CollectionEntry<'logs'>[],
   sideProjects: CollectionEntry<'sideProjects'>[],
   media: CollectionEntry<'media'>[]
 }) => {
@@ -25,7 +23,7 @@ export const AboutContent = ({
   const [loading, setLoading] = useState(true)
   const [totalStars, setTotalStars] = useState<number | string>(0)
   const [totalForks, setTotalForks] = useState<number | string>(0)
-  const [graphSvg, setGraphSvg] = useState<string | null>(initialGraphSvg || null)
+  const [graphSvg] = useState<string | null>(initialGraphSvg || null)
 
   useEffect(() => {
     const fetchGithubData = async () => {

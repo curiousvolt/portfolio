@@ -1,8 +1,5 @@
 {
   "license": "MIT",
-  "engines": {
-    "node": ">=20.0.0"
-  },
   "browserslist": "> 0.5%, last 2 versions, Firefox ESR, not dead",
   "keywords": [
     "astro",

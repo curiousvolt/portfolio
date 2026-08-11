@@ -6,7 +6,6 @@ import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import { SITE } from '@/consts'
 import { getCollection } from 'astro:content'
 
-const logs = await getCollection('logs')
 const sideProjects = await getCollection('sideProjects')
 const media = await getCollection('media')
 
@@ -36,6 +35,6 @@ try {
      <div class="mb-6 sm:mb-8">
        <Breadcrumbs items={[{ label: 'About', icon: 'lucide:user' }]} />
      </div>
-     <AboutContent client:load initialGraphSvg={graphSvg} logs={logs} sideProjects={sideProjects} media={media} />
+     <AboutContent client:load initialGraphSvg={graphSvg} sideProjects={sideProjects} media={media} />
   </section>
 </Layout>
