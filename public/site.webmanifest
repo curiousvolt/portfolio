@@ -1,11 +1,11 @@
 {
-  "name": "Aman",
-  "short_name": "Aman",
+  "name": "CuriousVolt",
+  "short_name": "CuriousVolt",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/me.jpg",
       "sizes": "1000x1000",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     }
   ],
