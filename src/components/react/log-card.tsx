@@ -33,7 +33,7 @@ const renderAnimation = (icon: string, hexColor: string) => {
   }
 }
 
-export const LogCard = ({ log }: { log: CollectionEntry<'logs'> }) => {
+export const LogCard = ({ log, compactMobile = false }: { log: CollectionEntry<'logs'>, compactMobile?: boolean }) => {
   const data = log.data
   const visuals = getLogVisuals(data.status)
   const IconComponent = IconMap[visuals.icon] || Layers
@@ -65,7 +65,7 @@ export const LogCard = ({ log }: { log: CollectionEntry<'logs'> }) => {
       </h3>
 
       {/* 1-Line Description */}
-      <p className="relative z-10 text-sm text-muted-foreground truncate pr-8">
+      <p className={`relative z-10 text-sm text-muted-foreground truncate pr-8 ${compactMobile ? 'hidden sm:block' : ''}`}>
         {data.description}
       </p>
 
