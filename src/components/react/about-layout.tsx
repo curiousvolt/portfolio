@@ -91,7 +91,7 @@ export const AboutContent = ({
             onClick={() => setActiveTab('side')}
             className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-full text-sm font-bold transition-all duration-300 ${activeTab === 'side' ? 'bg-background text-foreground border border-border/40' : 'text-muted-foreground hover:text-foreground border border-transparent'}`}
           >
-            <Folder size={16} className={activeTab === 'side' ? "text-primary" : ""} /> Side projects
+            <Folder size={16} className={activeTab === 'side' ? "text-primary" : ""} /> Weekend Builds
           </button>
           <button 
             onClick={() => setActiveTab('github')}
