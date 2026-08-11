@@ -2,12 +2,12 @@
 import Link from '@/components/Link.astro'
 import PageHead from '@/components/PageHead.astro'
 import BlogCard from '@/components/react/blog-card'
-import Skills from '@/components/react/skills'
+import { LogCard } from '@/components/react/log-card'
 import { buttonVariants } from '@/components/ui/button'
 import Logo from '@/components/ui/logo'
 import Layout from '@/layouts/Layout.astro'
 import { getRecentPosts } from '@/lib/data-utils'
-import { SITE } from '@/consts'
+import { SITE, LOGS } from '@/consts'
 
 const blog = await getRecentPosts(3)
 const currentUrl = Astro.url;
@@ -15,61 +15,90 @@ const currentUrl = Astro.url;
 
 <Layout canonicalUrl={currentUrl}>
   <PageHead slot="head" title="Aman" />
-  <section class="flex flex-col gap-y-12 py-8">
+  <section class="flex flex-col gap-y-12 py-8 w-full max-w-full overflow-hidden">
     <div
-      class="flex flex-col items-center text-center sm:flex-row sm:items-start sm:gap-8 sm:text-left animate-fade-in-up"
+      class="flex flex-col items-center text-center sm:flex-row sm:items-start sm:gap-8 sm:text-left animate-fade-in-up w-full min-w-0"
     >
       <div class="relative sm:shrink-0">
         <Logo
           className="h-auto w-36 object-cover sm:w-44 md:w-52 lg:w-56"
         />
       </div>
-      <div class="mt-8 sm:mt-0 sm:max-w-xl">
+      <div class="mt-8 sm:mt-0 sm:max-w-xl w-full min-w-0">
         <h1
-          class="font-custom text-foreground text-start text-4xl font-extrabold sm:text-5xl"
+          class="font-custom text-foreground text-start text-4xl font-extrabold sm:text-5xl truncate"
         >
           {SITE.author}
         </h1>
         <div class="mt-4 flex items-center gap-2" aria-label="location">
           <span
-            class="bg-primary text-primary-foreground ring-primary/30 rounded-full px-3 py-1 text-sm font-medium ring-1"
+            class="bg-primary text-primary-foreground ring-primary/30 rounded-full px-3 py-1 text-sm font-medium ring-1 whitespace-nowrap"
           >
             I'm from
           </span>
           <span class="flex items-center gap-1">
-            <span class="text-foreground text-sm font-medium"> {SITE.location}</span>
-            <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="h-6 w-6 transition-transform duration-500 hover:rotate-12" preserveAspectRatio="xMidYMid meet" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#138808" d="M0 27a4 4 0 0 0 4 4h28a4 4 0 0 0 4-4v-4H0v4z"></path><path fill="#EEE" d="M0 13h36v10H0z"></path><path fill="#F93" d="M36 13V9a4 4 0 0 0-4-4H4a4 4 0 0 0-4 4v4h36z"></path><circle fill="navy" cx="18" cy="18" r="4"></circle><circle fill="#EEE" cx="18" cy="18" r="3"></circle><path fill="#6666B3" d="M18 15l.146 2.264l1.001-2.035l-.73 2.147l1.704-1.498l-1.497 1.705l2.147-.731l-2.035 1.002L21 18l-2.264.146l2.035 1.001l-2.147-.73l1.497 1.704l-1.704-1.497l.73 2.147l-1.001-2.035L18 21l-.146-2.264l-1.002 2.035l.731-2.147l-1.705 1.497l1.498-1.704l-2.147.73l2.035-1.001L15 18l2.264-.146l-2.035-1.002l2.147.731l-1.498-1.705l1.705 1.498l-.731-2.147l1.002 2.035z"></path><circle fill="navy" cx="18" cy="18" r="1"></circle></g></svg>
+            <span class="text-foreground text-sm font-medium whitespace-nowrap"> {SITE.location}</span>
+            <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="h-6 w-6 transition-transform duration-500 hover:rotate-12 shrink-0" preserveAspectRatio="xMidYMid meet" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#138808" d="M0 27a4 4 0 0 0 4 4h28a4 4 0 0 0 4-4v-4H0v4z"></path><path fill="#EEE" d="M0 13h36v10H0z"></path><path fill="#F93" d="M36 13V9a4 4 0 0 0-4-4H4a4 4 0 0 0-4 4v4h36z"></path><circle fill="navy" cx="18" cy="18" r="4"></circle><circle fill="#EEE" cx="18" cy="18" r="3"></circle><path fill="#6666B3" d="M18 15l.146 2.264l1.001-2.035l-.73 2.147l1.704-1.498l-1.497 1.705l2.147-.731l-2.035 1.002L21 18l-2.264.146l2.035 1.001l-2.147-.73l1.497 1.704l-1.704-1.497l.73 2.147l-1.001-2.035L18 21l-.146-2.264l-1.002 2.035l.731-2.147l-1.705 1.497l1.498-1.704l-2.147.73l2.035-1.001L15 18l2.264-.146l-2.035-1.002l2.147.731l-1.498-1.705l1.705 1.498l-.731-2.147l1.002 2.035z"></path><circle fill="navy" cx="18" cy="18" r="1"></circle></g></svg>
           </span>
         </div>
-        <p class="text-md text-foreground mt-4 text-start font-sans" title="description" aria-label="description">
+        <p class="text-md text-foreground mt-4 text-start font-sans whitespace-normal break-words" title="description" aria-label="description">
           {SITE.description}
         </p>
       </div>
     </div>
 
-    <section class="relative animate-fade-in-up delay-200" aria-labelledby="skills-title">
-      <h2
-        id="skills-title"
-        class="font-custom text-foreground text-2xl font-bold"
-        title="skills"
-        aria-label="skills"
-        role="heading"
-      >
-        Skills & Technologies
-      </h2>
-      <p class="text-muted-foreground text-sm" aria-label="skills description">
-        Here are some of the technologies I've been working with:
+    <section class="relative animate-fade-in-up delay-200 w-full min-w-0" aria-labelledby="now-title">
+      <div class="flex items-center gap-2">
+        <h2
+          id="now-title"
+          class="font-custom text-foreground text-2xl font-bold truncate"
+          title="now"
+          aria-label="now"
+          role="heading"
+        >
+          Now - What I'm Tinkering With
+        </h2>
+      </div>
+      <p class="text-muted-foreground text-sm mb-6 mt-1 whitespace-normal break-words" aria-label="now description">
+        A running log of experiments, breakages, and small wins.
       </p>
-      <div>
-        <Skills client:load />
+      <div class="relative flex flex-col gap-y-8 w-full min-w-0 pl-4 sm:pl-8">
+        <!-- Continuous Timeline Line -->
+        <div class="absolute left-[21px] sm:left-[37px] top-6 bottom-6 w-[2px] bg-border/40 z-0"></div>
+        
+        {
+          LOGS.slice(0, 3).map((log) => (
+            <div class="relative pl-10 sm:pl-16 z-10 group/timeline w-full min-w-0 mt-6">
+              <!-- Timeline Date Label -->
+              <div class="absolute left-[6px] top-1/2 -translate-x-1/2 -translate-y-[220%] sm:-translate-y-[200%] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-background px-1 z-20 leading-tight text-center">
+                <span class="block sm:hidden">{log.date.split(' ')[0]}<br/>{log.date.split(' ')[1]}</span>
+                <span class="hidden sm:block">{log.date}</span>
+              </div>
+              <!-- Timeline Dot -->
+              <div class="absolute left-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-border ring-4 ring-background transition-colors duration-300 group-hover/timeline:bg-primary z-10"></div>
+              <LogCard log={log} client:load />
+            </div>
+          ))
+        }
+      </div>
+      <div class="flex justify-center mt-6" aria-label="see full log">
+        <Link
+          href="/logs"
+          class={buttonVariants({ variant: 'ghost' }) + ' group'}
+        >
+          See full log <span
+            class="ml-1.5 transition-transform group-hover:translate-x-1"
+            >&rarr;</span
+          >
+        </Link>
       </div>
     </section>
 
-    <section class="flex flex-col gap-y-4 animate-fade-in-up delay-400" aria-labelledby="latest-posts-title" role="region">
-      <div class="relative" aria-labelledby="latest-posts-title">
+    <section class="flex flex-col gap-y-4 animate-fade-in-up delay-400 w-full min-w-0" aria-labelledby="latest-posts-title" role="region">
+      <div class="relative w-full min-w-0" aria-labelledby="latest-posts-title">
         <h2
           id="latest-posts-title"
-          class="font-custom text-foreground text-2xl font-bold"
+          class="font-custom text-foreground text-2xl font-bold truncate"
           title="latest blog posts"
           aria-label="latest blog posts"
         >

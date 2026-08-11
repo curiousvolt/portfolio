@@ -1,0 +1,36 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import PageHead from '@/components/PageHead.astro'
+import { AboutContent } from '@/components/react/about-layout'
+import Breadcrumbs from '@/components/Breadcrumbs.astro'
+import { SITE } from '@/consts'
+
+const currentUrl = Astro.url;
+
+let graphSvg = null;
+try {
+  const response = await fetch('https://ghchart.rshah.org/CuriousVolt');
+  if (response.ok) {
+    let svg = await response.text();
+    // Strip text elements
+    svg = svg.replace(/<text[^>]*>.*?<\/text>/g, '');
+    // Crop viewbox to just the grid
+    svg = svg.replace(/width="[^"]*" height="[^"]*"/, 'viewBox="27 20 634 82" width="100%" height="100%"');
+    // Remove the hardcoded fill colors and make the squares rounded
+    svg = svg.replace(/style="fill:#[a-fA-F0-9]+;shape-rendering:crispedges;"/g, 'rx="2" ry="2"');
+    graphSvg = svg;
+  }
+} catch (e) {
+  console.error("Failed to fetch Github Chart", e);
+}
+---
+
+<Layout canonicalUrl={currentUrl}>
+  <PageHead slot="head" title={`About | ${SITE.title}`} />
+  <section class="min-h-screen">
+     <div class="mb-6 sm:mb-8">
+       <Breadcrumbs items={[{ label: 'About', icon: 'lucide:user' }]} />
+     </div>
+     <AboutContent client:load initialGraphSvg={graphSvg} />
+  </section>
+</Layout>

@@ -1,0 +1,54 @@
+---
+import Breadcrumbs from '@/components/Breadcrumbs.astro'
+import PageHead from '@/components/PageHead.astro'
+import Layout from '@/layouts/Layout.astro'
+import { LOGS } from '@/consts'
+import { LogCard } from '@/components/react/log-card'
+import { Icon } from 'astro-icon/components'
+
+const currentUrl = Astro.url;
+---
+
+<Layout canonicalUrl={currentUrl}>
+  <PageHead slot="head" title="Logs" />
+  
+  <Breadcrumbs
+    items={[
+      { label: 'Logs', href: '/logs', icon: 'lucide:activity' },
+    ]}
+  />
+  <section class="mt-12 animate-fade-in-up">
+    <div class="flex w-fit items-center gap-x-2 text-primary mb-4">
+        <Icon class="h-4 w-4 text-secondary-foreground animate-pulse" name="lucide:terminal" />
+        <p class="shimmer font-mono text-sm uppercase leading-none text-secondary-foreground tracking-widest bg-clip-text">
+          Changelog
+        </p>
+    </div>
+    <div class="flex items-center gap-2">
+      <h1 class="font-custom text-3xl font-bold text-neutral-900 dark:text-neutral-100 sm:text-4xl">
+        Now - What I'm Tinkering With
+      </h1>
+    </div>
+    <p class="text-muted-foreground text-md max-w-2xl mt-4 leading-relaxed mb-12">
+      A running log of experiments, breakages, and small wins. This is where I document what I'm actively working on, learning, or shipping right now.
+    </p>
+
+    <div class="relative flex flex-col gap-y-8 w-full min-w-0 pl-4 sm:pl-8 my-12 mb-24">
+      <!-- Continuous Timeline Line -->
+      <div class="absolute left-[21px] sm:left-[37px] top-6 bottom-6 w-[2px] bg-border/40 z-0"></div>
+      
+      {LOGS.map((log) => (
+        <div class="relative pl-10 sm:pl-16 z-10 group/timeline mt-6">
+          <!-- Timeline Date Label -->
+          <div class="absolute left-[6px] top-1/2 -translate-x-1/2 -translate-y-[220%] sm:-translate-y-[200%] text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-background px-1 z-20 leading-tight text-center">
+            <span class="block sm:hidden">{log.date.split(' ')[0]}<br/>{log.date.split(' ')[1]}</span>
+            <span class="hidden sm:block">{log.date}</span>
+          </div>
+          <!-- Timeline Dot -->
+          <div class="absolute left-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-border ring-4 ring-background transition-colors duration-300 group-hover/timeline:bg-primary z-10"></div>
+          <LogCard log={log} client:load />
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>

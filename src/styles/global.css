@@ -264,6 +264,25 @@
     }
   }
 
+  @keyframes draw {
+    0% {
+      stroke-dashoffset: 100;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .draw-icon {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+  }
+
+  .group:hover .draw-icon,
+  .draw-icon:hover {
+    animation: draw 1.5s ease-in-out forwards;
+  }
+
   .animate-fade-in-up {
     animation: fade-in-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   }

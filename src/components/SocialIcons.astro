@@ -11,33 +11,62 @@ interface Props {
 }
 
 const { links } = Astro.props
+
+const isProtected = (label: string) => label === 'Phone' || label === 'Email';
 ---
 
 <ul class="flex flex-wrap gap-2 justify-around w-full mb-4 md:justify-center md:mb-0 md:w-auto" role="list" aria-label="social links">
   {
-    links.map(({ href, label }) => (
-      <li aria-label={label} role="listitem">
-        <Link
-          href={href}
-          aria-label={label}
-          title={label}
-          class={cn(
-            buttonVariants({ variant: 'ghost', size: 'icon' }),
-            'group text-2xl size-14 lg:size-9 lg:text-base transition-colors duration-200 hover:bg-muted hover:-translate-y-1',
-          )}
-          target="_blank"
-          rel="noopener noreferrer"
-          external
-        >
-          <Icon
-            name={
-              ICON_MAP[label as keyof typeof ICON_MAP] ||
-              'lucide:message-circle-question'
-            }
-            class="size-4"
-          />
-        </Link>
-      </li>
-    ))
+    links.map(({ href, label }) => {
+      const obf = isProtected(label) ? Buffer.from(href).toString('base64') : undefined;
+      const safeHref = isProtected(label) ? '#' : href;
+      
+      return (
+        <li aria-label={label} role="listitem">
+          <Link
+            href={safeHref}
+            data-obf={obf}
+            aria-label={label}
+            title={label}
+            class={cn(
+              buttonVariants({ variant: 'ghost', size: 'icon' }),
+              'group text-2xl size-14 lg:size-9 lg:text-base transition-colors duration-200 hover:bg-muted hover:-translate-y-1 contact-link',
+            )}
+            target={isProtected(label) ? undefined : "_blank"}
+            rel={isProtected(label) ? undefined : "noopener noreferrer"}
+            external={!isProtected(label)}
+          >
+            <Icon
+              name={
+                ICON_MAP[label as keyof typeof ICON_MAP] ||
+                'lucide:message-circle-question'
+              }
+              class="size-4 draw-icon"
+            />
+          </Link>
+        </li>
+      )
+    })
   }
 </ul>
+
+<script>
+  // Decode protected links on interaction to prevent bot scraping while keeping native UX
+  const decodeLink = (e: Event) => {
+    const el = e.currentTarget as HTMLAnchorElement;
+    const obf = el.getAttribute('data-obf');
+    if (obf) {
+      el.setAttribute('href', atob(obf));
+      el.removeAttribute('data-obf');
+      el.removeEventListener('mouseenter', decodeLink);
+      el.removeEventListener('focus', decodeLink);
+      el.removeEventListener('touchstart', decodeLink);
+    }
+  };
+  
+  document.querySelectorAll('.contact-link[data-obf]').forEach(el => {
+    el.addEventListener('mouseenter', decodeLink);
+    el.addEventListener('focus', decodeLink);
+    el.addEventListener('touchstart', decodeLink, {passive: true});
+  });
+</script>
