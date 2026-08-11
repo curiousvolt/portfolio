@@ -39,7 +39,7 @@ export const LogCard = ({ log, compactMobile = false }: { log: CollectionEntry<'
   const IconComponent = IconMap[visuals.icon] || Layers
 
   return (
-    <a href={`/logs/${log.id}`} className="block group p-4 sm:p-5 rounded-2xl border border-border/50 bg-card/20 hover:bg-secondary/30 hover:border-border/80 transition-all duration-300 relative overflow-hidden">
+    <a href={`/logs/${log.id}`} className="block group p-4 rounded-2xl border border-border/50 bg-card/20 hover:bg-secondary/30 hover:border-border/80 transition-all duration-300 relative overflow-hidden">
       
       {/* Dynamic Background Animation */}
       {renderAnimation(visuals.icon, visuals.hex)}
@@ -60,7 +60,7 @@ export const LogCard = ({ log, compactMobile = false }: { log: CollectionEntry<'
       </div>
 
       {/* Title */}
-      <h3 className="relative z-10 text-base sm:text-lg font-mono font-bold text-foreground mb-1 pr-8 group-hover:text-primary transition-colors duration-200">
+      <h3 className="relative z-10 text-base font-mono font-bold text-foreground mb-1 pr-8 group-hover:text-primary transition-colors duration-200">
         {data.title}
       </h3>
 
