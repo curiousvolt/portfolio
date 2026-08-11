@@ -30,8 +30,10 @@ export const MatrixRain = ({ color = '#22c55e' }: { color?: string }) => {
       if (deltaTime > interval) {
         lastTime = currentTime - (deltaTime % interval)
 
+        ctx.globalCompositeOperation = 'destination-out'
         ctx.fillStyle = 'rgba(0, 0, 0, 0.1)' // Fading effect
         ctx.fillRect(0, 0, width, height)
+        ctx.globalCompositeOperation = 'source-over'
 
         ctx.fillStyle = color
         ctx.font = `${fontSize}px monospace`

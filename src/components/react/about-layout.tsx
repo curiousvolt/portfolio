@@ -2,13 +2,24 @@ import { useState, useEffect } from 'react'
 import { GithubRepoCard } from './github-repo-card'
 import { SideProjectCard } from './side-project-card'
 import { MediaCard } from './media-card'
-import { SIDE_PROJECTS, RECENT_MEDIA, SITE } from '@/consts'
+import { SITE, GITHUB_REPOS } from '@/consts'
 import type { GitHubRepo } from '@/consts'
-import { Folder, Github, Mail, Star, GitFork, Loader2, Twitter } from 'lucide-react'
+import type { CollectionEntry } from 'astro:content'
+import { Folder, Github, Mail, Star, GitFork, Loader2, Twitter, FileText } from 'lucide-react'
 
 
 
-export const AboutContent = ({ initialGraphSvg }: { initialGraphSvg?: string | null }) => {
+export const AboutContent = ({ 
+  initialGraphSvg, 
+  logs, 
+  sideProjects, 
+  media 
+}: { 
+  initialGraphSvg?: string | null,
+  logs: CollectionEntry<'logs'>[],
+  sideProjects: CollectionEntry<'sideProjects'>[],
+  media: CollectionEntry<'media'>[]
+}) => {
   const [activeTab, setActiveTab] = useState<'side' | 'github'>('side')
   const [repos, setRepos] = useState<GitHubRepo[]>([])
   const [loading, setLoading] = useState(true)
@@ -55,7 +66,8 @@ export const AboutContent = ({ initialGraphSvg }: { initialGraphSvg?: string | n
         setRepos(formattedRepos.slice(0, 4)) // Only show top 4 repos
       } catch (error) {
         console.error('Error fetching github data', error)
-        // Fallback to empty if rate limited
+        // Fallback to static repos if rate limited
+        setRepos(GITHUB_REPOS)
       } finally {
         setLoading(false)
       }
@@ -68,11 +80,11 @@ export const AboutContent = ({ initialGraphSvg }: { initialGraphSvg?: string | n
     <div className="flex flex-col items-center w-full max-w-3xl mx-auto py-12 px-4 sm:px-0">
       {/* Profile Header */}
       <div className="flex justify-between items-center w-full mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden bg-secondary border border-border/50">
-             <img src="https://avatars.githubusercontent.com/u/101831849?v=4" alt={SITE.author} className="w-full h-full object-cover" />
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="w-12 h-12 sm:w-20 sm:h-20 shrink-0 rounded-full overflow-hidden bg-secondary border border-border/50">
+             <img src="/me.jpg" alt={SITE.author} className="w-full h-full object-cover" />
           </div>
-          <h1 className="font-custom text-3xl sm:text-4xl font-bold">{SITE.author}</h1>
+          <h1 className="font-custom text-2xl sm:text-4xl font-bold tracking-tight">{SITE.author}</h1>
         </div>
 
         <div className="flex items-center gap-2">
@@ -105,9 +117,20 @@ export const AboutContent = ({ initialGraphSvg }: { initialGraphSvg?: string | n
         </div>
       </div>
       
-      <p className="text-base sm:text-lg text-foreground/80 leading-relaxed mb-10 w-full animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: '150ms', animationFillMode: 'both' }}>
+      <p className="text-sm sm:text-lg text-foreground/80 leading-relaxed mb-8 w-full animate-in fade-in slide-in-from-bottom-4 duration-700 break-words whitespace-normal" style={{ animationDelay: '150ms', animationFillMode: 'both' }}>
         Hi! I'm {SITE.author.split(' ')[0]}, a developer and creator based in {SITE.location}. Check out my work below and get to know me a bit through this little site!
       </p>
+
+      <div className="w-full flex mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
+        <a 
+          href="/resume.pdf" 
+          target="_blank"
+          className="group flex items-center gap-2 px-6 py-2.5 border border-border/50 bg-secondary/30 hover:bg-secondary text-foreground text-sm font-bold rounded-full transition-all duration-300"
+        >
+          <FileText size={16} className="text-primary group-hover:scale-110 transition-transform" />
+          Download Resume
+        </a>
+      </div>
 
       {/* Main Tabs (Replaced) */}
       <div className="w-full mt-4 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: '250ms', animationFillMode: 'both' }}>
@@ -116,13 +139,13 @@ export const AboutContent = ({ initialGraphSvg }: { initialGraphSvg?: string | n
             onClick={() => setActiveTab('side')}
             className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-full text-sm font-bold transition-all duration-300 ${activeTab === 'side' ? 'bg-background text-foreground border border-border/40' : 'text-muted-foreground hover:text-foreground border border-transparent'}`}
           >
-            <Folder size={16} className={activeTab === 'side' ? "text-purple-500" : ""} /> Side projects
+            <Folder size={16} className={activeTab === 'side' ? "text-primary" : ""} /> Side projects
           </button>
           <button 
             onClick={() => setActiveTab('github')}
             className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-full text-sm font-bold transition-all duration-300 ${activeTab === 'github' ? 'bg-background text-foreground border border-border/40' : 'text-muted-foreground hover:text-foreground border border-transparent'}`}
           >
-            <Github size={16} className={activeTab === 'github' ? "text-purple-500" : ""} /> GitHub
+            <Github size={16} className={activeTab === 'github' ? "text-primary" : ""} /> GitHub
           </button>
         </div>
 
@@ -131,7 +154,7 @@ export const AboutContent = ({ initialGraphSvg }: { initialGraphSvg?: string | n
           
           {activeTab === 'side' && (
             <div className="w-full relative min-h-[400px]">
-               {SIDE_PROJECTS.map((project, i) => (
+               {sideProjects.map((project, i) => (
                  <div key={i} className="animate-in fade-in slide-in-from-bottom-8 duration-700" style={{ animationDelay: `${i * 150}ms`, animationFillMode: 'both' }}>
                    <SideProjectCard project={project} />
                  </div>
@@ -186,10 +209,10 @@ export const AboutContent = ({ initialGraphSvg }: { initialGraphSvg?: string | n
                         {/* Live Graph from Server */}
                         <div className="w-full h-32 sm:h-40 rounded-lg flex items-center justify-center p-2 sm:p-4
                             [&_rect[data-score='0']]:fill-black/10 dark:[&_rect[data-score='0']]:fill-white/10
-                            [&_rect[data-score='1']]:fill-purple-500/30
-                            [&_rect[data-score='2']]:fill-purple-500/50
-                            [&_rect[data-score='3']]:fill-purple-500/80
-                            [&_rect[data-score='4']]:fill-purple-500
+                            [&_rect[data-score='1']]:fill-primary/30
+                            [&_rect[data-score='2']]:fill-primary/50
+                            [&_rect[data-score='3']]:fill-primary/80
+                            [&_rect[data-score='4']]:fill-primary
                         ">
                           {graphSvg ? (
                             <div 
@@ -214,7 +237,7 @@ export const AboutContent = ({ initialGraphSvg }: { initialGraphSvg?: string | n
         <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-8 text-center sm:text-left">Last watched / read / listened to / played</h3>
         
         <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto pb-6 scrollbar-hide snap-x">
-          {RECENT_MEDIA.map((item, i) => (
+          {media.map((item, i) => (
             <div key={i} className="snap-start animate-in fade-in slide-in-from-right-8 duration-700" style={{ animationDelay: `${500 + (i * 100)}ms`, animationFillMode: 'both' }}>
                 <MediaCard item={item} />
             </div>

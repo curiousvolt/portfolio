@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
 import Link from './link'
 import ThemeToggle from './theme-toggle'
-import { NAV_LINKS, SITE } from '../../consts'
+import { NAV_LINKS, SITE, SOCIAL_LINKS } from '../../consts'
 import { cn } from '@/lib/utils'
 import debounce from 'lodash.debounce'
 import { Button } from '@/components/ui/button'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Github, Mail, Phone, Instagram, Rss } from 'lucide-react'
 import { Separator } from '../ui/separator'
 
 const Navbar = () => {
@@ -136,7 +136,7 @@ const Navbar = () => {
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                 className={
-                  "flex h-9 w-9 items-center justify-center rounded-full p-0 transition-colors duration-200 ease-in-out hover:bg-muted"
+                  "flex h-9 w-9 -mr-2 items-center justify-center rounded-full p-0 transition-colors duration-200 ease-in-out hover:bg-muted"
                 }
               >
                 {mobileMenuOpen ? (
@@ -186,6 +186,23 @@ const Navbar = () => {
                 transition={{ delay: 0.1 + NAV_LINKS.length * 0.06 + 0.05, duration: 0.3 }}
                 className="mt-auto flex flex-col items-center gap-6"
               >
+                <div className="flex flex-wrap items-center justify-center gap-4 text-center w-full mb-2">
+                  {SOCIAL_LINKS.map((link) => {
+                    const Icon = 
+                      link.label === 'GitHub' ? Github :
+                      link.label === 'Email' ? Mail :
+                      link.label === 'Phone' ? Phone :
+                      link.label === 'Instagram' ? Instagram :
+                      link.label === 'RSS' ? Rss : Rss;
+                    
+                    return (
+                      <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full hover:bg-muted text-foreground transition-colors" aria-label={link.label}>
+                        <Icon className="w-5 h-5" />
+                      </a>
+                    );
+                  })}
+                </div>
+
                 <div className="flex flex-wrap items-center justify-center gap-x-2 text-center">
                   <span className="text-muted-foreground text-sm" aria-label="copyright">
                     &copy; {new Date().getFullYear()} All rights reserved.

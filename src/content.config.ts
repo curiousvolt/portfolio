@@ -29,4 +29,45 @@ const projects = defineCollection({
     }),
 })
 
-export const collections = { blog, projects }
+const logs = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/logs' }),
+  schema: () =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      date: z.string(),
+      status: z.enum(['Active', 'Prototyping', 'Shipped']),
+      tags: z.array(z.string()).optional(),
+    }),
+})
+
+const sideProjects = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/side-projects' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      image: image(),
+      isLargeImage: z.boolean(),
+      links: z.array(
+        z.object({
+          name: z.string(),
+          url: z.string(),
+        })
+      ).optional(),
+      tags: z.array(z.string()).optional(),
+    }),
+})
+
+const media = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/media' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      type: z.enum(['movie', 'book', 'music', 'game']),
+      image: image(),
+      url: z.string(),
+    }),
+})
+
+export const collections = { blog, projects, logs, sideProjects, media }

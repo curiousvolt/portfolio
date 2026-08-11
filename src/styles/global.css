@@ -207,7 +207,8 @@
   h4,
   h5,
   h6 {
-    @apply text-foreground font-bold;
+    @apply text-foreground font-bold tracking-normal;
+    word-spacing: 0.1em;
   }
 
   a {
