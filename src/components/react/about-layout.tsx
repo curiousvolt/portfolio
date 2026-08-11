@@ -5,76 +5,28 @@ import { MediaCard } from './media-card'
 import { SITE, GITHUB_REPOS } from '@/consts'
 import type { GitHubRepo } from '@/consts'
 import type { CollectionEntry } from 'astro:content'
-import { Folder, Github, Mail, FileText, Star, GitFork, Loader2 } from 'lucide-react'
+import { Folder, Github, Mail, FileText, Star, GitFork } from 'lucide-react'
 
 
 
 export const AboutContent = ({ 
   initialGraphSvg, 
+  githubData,
   sideProjects,
   media
 }: { 
   initialGraphSvg?: string | null,
+  githubData: { repos: GitHubRepo[], stars: string, forks: string },
   sideProjects: CollectionEntry<'sideProjects'>[],
   media: CollectionEntry<'media'>[]
 }) => {
   const [activeTab, setActiveTab] = useState<'side' | 'github'>('side')
-  const [repos, setRepos] = useState<GitHubRepo[]>([])
-  const [loading, setLoading] = useState(true)
-  const [totalStars, setTotalStars] = useState<number | string>(0)
-  const [totalForks, setTotalForks] = useState<number | string>(0)
+  const repos = githubData.repos
+  const totalStars = githubData.stars
+  const totalForks = githubData.forks
   const [graphSvg] = useState<string | null>(initialGraphSvg || null)
 
-  useEffect(() => {
-    const fetchGithubData = async () => {
-      try {
-        const response = await fetch('https://api.github.com/users/CuriousVolt/repos?per_page=100')
-        if (!response.ok) throw new Error('Failed to fetch')
-        
-        const data = await response.json()
-        
-        let stars = 0
-        let forks = 0
-        const formattedRepos: GitHubRepo[] = data
-          .filter((repo: any) => !repo.fork) // Hide forks
-          .map((repo: any) => {
-            stars += repo.stargazers_count
-            forks += repo.forks_count
-            
-            return {
-              name: repo.name,
-              description: repo.description || 'No description provided.',
-              language: repo.language || 'Documentation',
-              stars: repo.stargazers_count.toString(),
-              forks: repo.forks_count.toString(),
-              url: repo.html_url,
-              pushed_at: repo.pushed_at
-            }
-          })
-        
-        // Sort by stars descending, then by latest push
-        formattedRepos.sort((a, b) => {
-          const starDiff = parseInt(b.stars) - parseInt(a.stars)
-          if (starDiff !== 0) return starDiff
-          return new Date(b.pushed_at || 0).getTime() - new Date(a.pushed_at || 0).getTime()
-        })
-        
-        setTotalStars(stars)
-        setTotalForks(forks)
-        setRepos(formattedRepos.slice(0, 4)) // Only show top 4 repos
-      } catch (error) {
-        console.error('Error fetching github data', error)
-        // Fallback to static repos if rate limited
-        setRepos(GITHUB_REPOS)
-        setTotalStars('3.2k+')
-        setTotalForks('600+')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchGithubData()
-  }, [])
+  // Github data is now fetched at build time in about.astro
 
   return (
     <div className="flex flex-col items-center w-full max-w-3xl mx-auto py-12 px-4 sm:px-0">
@@ -174,12 +126,7 @@ export const AboutContent = ({
                 <a href="https://github.com/CuriousVolt" target="_blank" className="text-sm font-bold text-foreground hover:underline shrink-0">View all</a>
               </div>
 
-              {loading ? (
-                <div className="w-full py-24 flex items-center justify-center">
-                  <Loader2 className="animate-spin text-muted-foreground" size={32} />
-                </div>
-              ) : (
-                <>
+              <>
                   <div className="flex items-center justify-around bg-card/40 border border-border/40 rounded-2xl p-6 sm:p-8 mb-6 animate-in fade-in slide-in-from-bottom-8 duration-700" style={{ animationDelay: '150ms', animationFillMode: 'both' }}>
                       <div className="text-center flex gap-3 sm:gap-4 items-center">
                         <Star className="text-yellow-500" size={24} strokeWidth={2.5} /> 
@@ -226,7 +173,6 @@ export const AboutContent = ({
                     </div>
                   </div>
                 </>
-              )}
             </div>
           )}
         </div>
