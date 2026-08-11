@@ -39,13 +39,13 @@ export const LogCard = ({ log, compactMobile = false }: { log: CollectionEntry<'
   const IconComponent = IconMap[visuals.icon] || Layers
 
   return (
-    <a href={`/logs/${log.id}`} className="block group p-5 sm:p-6 rounded-2xl border border-border/50 bg-card/20 hover:bg-secondary/30 hover:border-border/80 transition-all duration-300 relative overflow-hidden">
+    <a href={`/logs/${log.id}`} className="block group p-4 sm:p-5 rounded-2xl border border-border/50 bg-card/20 hover:bg-secondary/30 hover:border-border/80 transition-all duration-300 relative overflow-hidden">
       
       {/* Dynamic Background Animation */}
       {renderAnimation(visuals.icon, visuals.hex)}
 
       {/* Top Row: Icon + Badges */}
-      <div className="flex items-center gap-4 mb-4 relative z-10">
+      <div className="flex items-center gap-3 mb-3 relative z-10">
         <IconComponent size={20} className={`${visuals.colorClass} shrink-0`} strokeWidth={2} />
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="outline" className={`uppercase text-[10px] tracking-wider font-bold ${visuals.badge}`}>
@@ -60,12 +60,12 @@ export const LogCard = ({ log, compactMobile = false }: { log: CollectionEntry<'
       </div>
 
       {/* Title */}
-      <h3 className="relative z-10 text-lg sm:text-xl font-mono font-bold text-foreground mb-2 pr-8 group-hover:text-primary transition-colors duration-300">
+      <h3 className="relative z-10 text-base sm:text-lg font-mono font-bold text-foreground mb-1 pr-8 group-hover:text-primary transition-colors duration-200">
         {data.title}
       </h3>
 
-      {/* 1-Line Description */}
-      <p className={`relative z-10 text-sm font-light text-muted-foreground truncate pr-8 ${compactMobile ? 'hidden sm:block' : ''}`}>
+      {/* Description */}
+      <p className={`relative z-10 text-sm leading-relaxed text-muted-foreground line-clamp-2 pr-8 ${compactMobile ? 'hidden sm:block' : ''}`}>
         {data.description}
       </p>
 
