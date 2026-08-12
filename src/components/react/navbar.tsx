@@ -98,8 +98,9 @@ const Navbar = () => {
           </Link>
 
           <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
-            <nav className="hidden items-center gap-6 md:flex" aria-label="Main navigation">
-              {NAV_LINKS.map((item) => {
+            {!isMobile && (
+              <nav className="flex items-center gap-6" aria-label="Main navigation">
+                {NAV_LINKS.map((item) => {
                 const isActive = activePath.startsWith(item.href) && item.href !== "/";
                 return (
                   <motion.div
@@ -126,6 +127,7 @@ const Navbar = () => {
                 );
               })}
             </nav>
+            )}
 
             <ThemeToggle />
 
