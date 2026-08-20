@@ -73,7 +73,7 @@ export const AboutContent = ({
         Hi! I'm {SITE.author.split(' ')[0]}, a developer and creator based in {SITE.location}. Check out my work below and get to know me a bit through this little site!
       </p>
 
-      <div className="w-full flex mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
+      <div className="w-full flex items-center gap-3 mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
         <a 
           href="/resume.pdf" 
           target="_blank"
@@ -81,6 +81,17 @@ export const AboutContent = ({
         >
           <FileText size={16} className="text-primary group-hover:scale-110 transition-transform" />
           Download Resume
+        </a>
+        <a
+          href="https://curiousvolt.substack.com"
+          target="_blank"
+          className="group flex items-center justify-center w-[42px] h-[42px] border border-border/50 bg-secondary/30 hover:bg-secondary text-foreground rounded-full transition-all duration-300"
+          aria-label="Substack"
+          title="Substack"
+        >
+          <svg role="img" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="text-[#FF6719] group-hover:scale-110 transition-transform">
+            <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
+          </svg>
         </a>
       </div>
 
