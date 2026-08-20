@@ -83,7 +83,7 @@ export const AboutContent = ({
           Download Resume
         </a>
         <a
-          href="https://curiousvolt.substack.com"
+          href="https://substack.com/@curiousvolt"
           target="_blank"
           className="group flex items-center justify-center w-[42px] h-[42px] border border-border/50 bg-secondary/30 hover:bg-secondary text-foreground rounded-full transition-all duration-300"
           aria-label="Substack"
