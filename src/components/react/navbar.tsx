@@ -10,7 +10,6 @@ import { Menu, X, Github, Mail, Phone, Instagram, Rss } from 'lucide-react'
 import { Separator } from '../ui/separator'
 
 const Navbar = () => {
-  const [isMobile, setIsMobile] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activePath, setActivePath] = useState("/")
   const [hidden, setHidden] = useState(false)
@@ -41,7 +40,6 @@ const Navbar = () => {
   useEffect(() => {
     const handleResize = debounce(() => {
       const isMobileView = window.matchMedia('(max-width: 768px)').matches
-      setIsMobile(isMobileView)
       if (!isMobileView && mobileMenuOpen) {
         setMobileMenuOpen(false)
       }
@@ -98,8 +96,7 @@ const Navbar = () => {
           </Link>
 
           <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
-            {!isMobile && (
-              <nav className="flex items-center gap-6" aria-label="Main navigation">
+              <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
                 {NAV_LINKS.map((item) => {
                 const isActive = activePath.startsWith(item.href) && item.href !== "/";
                 return (
@@ -127,18 +124,16 @@ const Navbar = () => {
                 );
               })}
             </nav>
-            )}
 
             <ThemeToggle />
 
-            {isMobile && (
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                 className={
-                  "flex h-9 w-9 -mr-2 items-center justify-center rounded-full p-0 transition-colors duration-200 ease-in-out hover:bg-muted"
+                  "flex h-9 w-9 -mr-2 items-center justify-center rounded-full p-0 transition-colors duration-200 ease-in-out hover:bg-muted md:hidden"
                 }
               >
                 {mobileMenuOpen ? (
@@ -147,7 +142,6 @@ const Navbar = () => {
                   <Menu className="h-5 w-5" />
                 )}
               </Button>
-            )}
           </div>
         </div>
       </motion.header>
