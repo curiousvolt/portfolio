@@ -14,25 +14,27 @@ export const SideProjectCard = ({ project }: { project: CollectionEntry<'sidePro
           {data.description}
         </p>
         
-        {data.links && data.links.length > 0 && (
-          <div className="flex flex-wrap gap-x-4 gap-y-3 mt-auto">
-            {data.links.map((link, idx) => (
-              <a key={idx} href={link.url} className="text-sm font-semibold text-muted-foreground underline hover:text-foreground transition-colors underline-offset-4">
-                {link.name}
-              </a>
-            ))}
-          </div>
-        )}
+        <div className="mt-auto flex flex-col gap-3">
+          {data.links && data.links.length > 0 && (
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
+              {data.links.map((link, idx) => (
+                <a key={idx} href={link.url} className="text-sm font-semibold text-muted-foreground underline hover:text-foreground transition-colors underline-offset-4">
+                  {link.name}
+                </a>
+              ))}
+            </div>
+          )}
 
-        {data.tags && data.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-auto">
-            {data.tags.map((tag, idx) => (
-              <span key={idx} className="px-2 py-0.5 bg-secondary/80 border border-border/50 text-[10px] font-bold text-muted-foreground rounded tracking-widest uppercase">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
+          {data.tags && data.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {data.tags.map((tag, idx) => (
+                <span key={idx} className="px-2 py-0.5 bg-secondary/80 border border-border/50 text-[10px] font-bold text-muted-foreground rounded tracking-widest uppercase">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

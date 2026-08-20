@@ -11,8 +11,10 @@ export const LogCard = ({ log }: { log: CollectionEntry<'logs'> }) => {
     }
   }
 
+  const href = (data as any).link || `/logs/${log.id}`;
+  
   return (
-    <a href={`/logs/${log.id}`} className="block group p-4 rounded-2xl border border-black/5 dark:border-white/5 bg-gradient-to-br from-white/60 to-white/10 dark:from-[#1a1a1a]/80 dark:to-[#0a0a0a]/80 backdrop-blur-2xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:border-black/10 dark:hover:border-white/10 hover:shadow-md transition-all duration-500 relative overflow-hidden text-left drop-shadow-sm">
+    <a href={href} className="block group p-4 rounded-2xl border border-black/5 dark:border-white/5 bg-gradient-to-br from-white/60 to-white/10 dark:from-[#1a1a1a]/80 dark:to-[#0a0a0a]/80 backdrop-blur-2xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.8)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:border-black/10 dark:hover:border-white/10 hover:shadow-md transition-all duration-500 relative overflow-hidden text-left drop-shadow-sm">
       
       {/* Subtle Noise Texture for frosted look */}
       <div 
