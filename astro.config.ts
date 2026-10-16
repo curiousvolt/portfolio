@@ -48,6 +48,10 @@ function rehypeDemoteH1AndStripTitle() {
 export default defineConfig({
   site: 'https://www.curiousvolt.me',
 
+  redirects: {
+    '/resume': '/resume.pdf',
+  },
+
   integrations: [expressiveCode({
     themes: ['catppuccin-latte', 'ayu-dark'],
     plugins: [pluginCollapsibleSections(), pluginLineNumbers()],

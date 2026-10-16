@@ -1,30 +1,55 @@
 ---
 name: 'DonateNow'
-description: 'A full-stack web application for managing donations to NGOs with PayPal integration, user authentication, email verification, and a comprehensive admin dashboard.'
+description: 'A full-stack charitable fundraising and donation management platform engineered with React and Node.js. Features automated PayPal checkout orchestration, dynamic PDF receipt generation, real-time campaign telemetry, and tax compliance data exports.'
 tags: ['react', 'node', 'mongodb', 'typescript', 'paypal']
 image: './donatenow.png'
 link: 'https://github.com/curiousvolt/donatenow'
 startDate: '2023-01-01'
 endDate: '2023-05-01'
+status: 'Shipped'
 ---
 
 ## Overview
 
-DonateNow is a full-stack web application for managing donations to NGOs with PayPal integration, user authentication, email verification, and a comprehensive admin dashboard.
+DonateNow is an open-source fundraising application built to streamline digital contributions for charitable organizations. The system provides donors with transparent transaction handling and instant receipt delivery while equipping NGO administrators with real-time campaign health metrics and compliance exports.
 
-## 🌟 Key Features
+## System Design
 
-### Custom PayPal Integration
-Allows donors to seamlessly and securely issue transactions directly to the NGO using PayPal Live and Sandbox modes. Each transaction is recorded and mapped properly within the MongoDB database.
+The application follows a modular full-stack architecture structured around three core subsystems: the public donation interface, the transactional payment pipeline, and the administrative analytics dashboard.
 
-### Admin Dashboard & Campaign Tracking
-A full-featured Admin panel built using Recharts for data visualization. Tracks campaign goals, current fundraising progress, user management. Supports dynamic CSV generation to export user and donation data for accounting purposes.
+- **Frontend Client**: Developed with React and TypeScript, leveraging Tailwind CSS for responsive component styling. Client-side routing isolates public donor workflows from protected administrative management views.
+- **Backend Service**: Built on Node.js and Express with TypeScript, implementing dedicated route handlers for authentication, payment orchestration, and reporting.
+- **Database Architecture**: MongoDB serves as the document store, structured with normalized schemas for campaigns, donations, and administrative audit trails.
 
-### Secure User Authentication
-End-to-end user authentication utilizing JSON Web Tokens (JWT). Includes OTP-based Email Verification handled via Nodemailer. Password management allows for secure resets through uniquely generated and short-lived OTP tokens.
+## Technical Implementation
 
-## 🏗 Tech Stack
+### Payment Pipeline and Idempotency
 
-- **Frontend**: React 18+ with TypeScript, Vite, Tailwind CSS, Recharts, jsPDF for downloading donation receipts.
-- **Backend**: Node.js, Express, TypeScript, MongoDB with Mongoose ODM, JWT, bcryptjs, Nodemailer.
-- **Security**: Rate Limiting, Server-side Input Validation, XSS Protection, CORS setup.
+Online transactions are processed through the PayPal REST API SDK supporting dual Sandbox and Production runtime modes:
+
+- Client initializes an order session via an authenticated server-side endpoint to verify campaign targets and prevent price tampering.
+- Upon client payment approval, the server executes order capture and validates transaction integrity before committing payment records to the database.
+- Idempotency keys and unique transaction identifiers prevent duplicate credit assignments during network retries or intermittent disconnects.
+
+### Authentication and Security Controls
+
+User and administrative security is enforced through layered defensive measures:
+
+- **Authentication**: Stateless JSON Web Tokens (JWT) with timed expiration paired with salted bcryptjs password hashing.
+- **Verification**: OTP-based email verification handled asynchronously via Nodemailer for account confirmation and password recovery.
+- **Protection**: Middleware applies strict CORS domain whitelisting, IP-based rate limiting via express-rate-limit, and sanitization of incoming JSON payloads to prevent injection attacks.
+
+### Reporting and Campaign Analytics
+
+The platform includes administrative tools to monitor fundraising performance and generate tax-compliant donor documentation:
+
+- **Interactive Dashboards**: Aggregation pipelines calculate total raised capital, average donation size, and daily donation velocity rendered through Recharts.
+- **PDF Receipt Engine**: Dynamic client-side receipt generation utilizing jsPDF, producing timestamped transaction proofs with organization registration numbers and payment hashes.
+- **Export Utility**: Formatted CSV data generation for seamless ingestion into standard financial accounting software.
+
+## Technology Stack
+
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS, Recharts, jsPDF
+- **Backend**: Node.js, Express, TypeScript, Nodemailer
+- **Database**: MongoDB, Mongoose ODM
+- **Payment Processing**: PayPal REST API

@@ -1,0 +1,123 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { Badge } from '@/components/ui/badge'
+import { Icon } from 'astro-icon/components'
+import { cn } from '@/lib/utils'
+
+interface Props {
+  project: CollectionEntry<'projects'>
+}
+
+const { project } = Astro.props
+const data = project.data
+const status = data.status || 'Building'
+
+let dateStr = ''
+if (data.endDate) {
+  const d = new Date(data.endDate)
+  dateStr = `${d.toLocaleString('en-US', { month: 'short' })} ${d.getFullYear()}`
+} else if (data.startDate) {
+  const d = new Date(data.startDate)
+  dateStr = `${d.toLocaleString('en-US', { month: 'short' })} ${d.getFullYear()} — Present`
+} else {
+  dateStr = 'Active'
+}
+
+const statusDots: Record<string, { dot: string; pulse: boolean }> = {
+  Shipped: { dot: 'bg-emerald-500', pulse: false },
+  Building: { dot: 'bg-amber-400', pulse: true },
+  Prototype: { dot: 'bg-sky-400', pulse: false },
+}
+const statusStyle = statusDots[status] || statusDots.Building
+
+const tagDisplayMap: Record<string, string> = {
+  react: 'React',
+  node: 'Node.js',
+  mongodb: 'MongoDB',
+  tailwind: 'Tailwind CSS',
+  typescript: 'TypeScript',
+  paypal: 'PayPal',
+  nextjs: 'Next.js',
+  astro: 'Astro',
+  python: 'Python',
+  docker: 'Docker',
+  express: 'Express',
+  javascript: 'JavaScript',
+}
+
+function formatTag(tag: string): string {
+  return tagDisplayMap[tag.toLowerCase()] || tag
+}
+
+const href = `/projects/${project.id}`
+---
+
+<div class="group rounded-xl border border-border/60 p-4 transition-all duration-300 ease-out hover:border-border hover:bg-secondary/40 hover:shadow-md hover:-translate-y-0.5">
+  <a href={href} class="block">
+    <!-- Top Row: Status Indicator & Date -->
+    <div class="flex items-center justify-between gap-2 mb-1.5">
+      <div class="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
+        <span
+          class:list={[
+            'w-1.5 h-1.5 rounded-full shrink-0',
+            statusStyle.dot,
+            statusStyle.pulse && 'animate-pulse',
+          ]}
+        />
+        <span>{status}</span>
+      </div>
+      <span class="text-xs text-muted-foreground font-normal">
+        {dateStr}
+      </span>
+    </div>
+
+    <!-- Title (Identical font, weight, and hover effect to BlogCard) -->
+    <h3 class="mb-1 text-lg font-medium transition-colors duration-200 group-hover:text-primary">
+      {data.name}
+    </h3>
+
+    <!-- Clean divider line after title -->
+    <div class="h-px bg-border/40 w-full my-2.5"></div>
+
+    <!-- Description (Identical typography and line-clamp to BlogCard) -->
+    {data.description && (
+      <p class="text-muted-foreground mb-2 text-sm leading-relaxed line-clamp-2">
+        {data.description}
+      </p>
+    )}
+
+    <!-- Tags: Compact mobile limit with overflow counter -->
+    {data.tags && data.tags.length > 0 && (
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-2">
+        {data.tags.slice(0, 3).map((tag: string, idx: number) => (
+          <Badge
+            variant="secondary"
+            className={cn(
+              'flex items-center gap-x-1 transition-colors duration-200 group-hover:bg-secondary text-xs',
+              idx >= 2 && 'hidden sm:inline-flex',
+            )}
+          >
+            <Icon name="lucide:hash" class="size-3" />
+            {formatTag(tag)}
+          </Badge>
+        ))}
+        {data.tags.length > 2 && (
+          <Badge
+            variant="secondary"
+            className="sm:hidden text-xs text-muted-foreground transition-colors group-hover:bg-secondary"
+          >
+            +{data.tags.length - 2}
+          </Badge>
+        )}
+        {data.tags.length > 3 && (
+          <Badge
+            variant="secondary"
+            className="hidden sm:inline-flex text-xs text-muted-foreground transition-colors group-hover:bg-secondary"
+          >
+            +{data.tags.length - 3}
+          </Badge>
+        )}
+      </div>
+    )}
+  </a>
+</div>

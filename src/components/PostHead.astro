@@ -20,9 +20,9 @@ const optimizedDescription = descTrimmed.length > 155
   ? descTrimmed.slice(0, 152) + '...'
   : descTrimmed
 
-// Compose seo title, clamp near 60 chars
-const baseSeoTitle = `${title} - ${SITE.title}`
-const seoTitle = baseSeoTitle.length > 60 ? baseSeoTitle.slice(0, 57) + '...' : baseSeoTitle
+// Compose seo title, clamp near 70 chars
+const baseSeoTitle = `${title} | ${SITE.title}`
+const seoTitle = baseSeoTitle.length > 70 ? baseSeoTitle.slice(0, 67) + '...' : baseSeoTitle
 const postUrlWithoutTrailingSlash = postUrl.endsWith('/') ? postUrl.slice(0, -1) : postUrl
 const postCanonicalUrl = new URL(postUrlWithoutTrailingSlash, SITE.href).toString()
 ---
@@ -37,7 +37,7 @@ const postCanonicalUrl = new URL(postUrlWithoutTrailingSlash, SITE.href).toStrin
 {post?.data.tags && <meta name="keywords" content={post.data.tags.join(', ')} />}
 
 <!-- Open Graph Meta Tags -->
-<meta property="og:title" content={title} />
+<meta property="og:title" content={baseSeoTitle} />
 <meta property="og:description" content={optimizedDescription} />
 <meta property="og:image" content={image} />
 <meta property="og:image:alt" content={title} />
@@ -57,12 +57,12 @@ const postCanonicalUrl = new URL(postUrlWithoutTrailingSlash, SITE.href).toStrin
 
 <!-- Twitter Card Meta Tags -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={title} />
+<meta name="twitter:title" content={baseSeoTitle} />
 <meta name="twitter:description" content={optimizedDescription} />
 <meta name="twitter:image" content={image} />
 <meta name="twitter:image:alt" content={title} />
-<meta name="twitter:creator" content={`@${SITE.author.replace(' ', '').toLowerCase()}`} />
-<meta name="twitter:site" content={`@${SITE.author.replace(' ', '').toLowerCase()}`} />
+<meta name="twitter:creator" content="@curiousvolt" />
+<meta name="twitter:site" content="@curiousvolt" />
 
 {
   post?.data.tags &&

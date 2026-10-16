@@ -26,18 +26,7 @@ const projects = defineCollection({
       link: z.string().url(),
       startDate: z.coerce.date().optional(),
       endDate: z.coerce.date().optional(),
-    }),
-})
-
-const logs = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/logs' }),
-  schema: () =>
-    z.object({
-      title: z.string(),
-      description: z.string(),
-      date: z.string(),
-      status: z.enum(['Active', 'Prototyping', 'Shipped']),
-      tags: z.array(z.string()).optional(),
+      status: z.enum(['Shipped', 'Building', 'Prototype']).default('Building'),
     }),
 })
 
@@ -70,4 +59,4 @@ const media = defineCollection({
     }),
 })
 
-export const collections = { blog, projects, logs, sideProjects, media }
+export const collections = { blog, projects, sideProjects, media }

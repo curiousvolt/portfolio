@@ -8,6 +8,7 @@ import Navbar from '@/components/react/navbar'
 import { SITE } from '@/consts'
 import { cn } from '@/lib/utils'
 import SpeedInsights from "@vercel/speed-insights/astro"
+import Analytics from "@vercel/analytics/astro"
 
 const {
   isWide = false
@@ -70,6 +71,7 @@ const {
       </main>
       <Footer />
       <SpeedInsights />
+      <Analytics />
     </div>
   </body>
 </html>

@@ -1,13 +1,16 @@
 ---
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
+import Link from '@/components/Link.astro'
 import TableOfContents from '@/components/TableOfContents.astro'
 import { badgeVariants } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import Layout from '@/layouts/Layout.astro'
 import { getAllProjects } from '@/lib/data-utils'
 import { Icon } from 'astro-icon/components'
 import { Image } from 'astro:assets'
 import { render } from 'astro:content'
 import PageHead from '@/components/PageHead.astro'
+import { MobileTOC } from '@/components/react/MobileTOC'
 
 export async function getStaticPaths() {
   const projects = await getAllProjects()
@@ -35,19 +38,47 @@ const structuredData = {
   description: project.data.description || '',
 }
 const currentUrl = Astro.url;
+
+const status = project.data.status || 'Building'
+const statusConfig: Record<string, { dot: string; pulse: boolean; label: string; hint: string }> = {
+  Shipped: {
+    dot: 'bg-emerald-500',
+    pulse: false,
+    label: 'Shipped',
+    hint: 'Live project available to use',
+  },
+  Building: {
+    dot: 'bg-amber-400',
+    pulse: true,
+    label: 'Building',
+    hint: 'Currently in active development',
+  },
+  Prototype: {
+    dot: 'bg-sky-400',
+    pulse: false,
+    label: 'Prototype',
+    hint: 'Early version / experiment',
+  },
+}
+const currentStatus = statusConfig[status] || statusConfig.Building
 ---
 
 <Layout canonicalUrl={currentUrl} isWide={true}> 
-  <PageHead slot="head" title={project.data.name} />
+  <PageHead 
+    slot="head" 
+    title={project.data.name} 
+    description={project.data.description} 
+    image={project.data.image?.src || `/image/${project.id}.png`} 
+  />
   <script
     type="application/ld+json"
     is:inline
     set:html={JSON.stringify(structuredData)}
   />
   <section
-    class="mx-auto w-full max-w-3xl xl:max-w-[1400px] flex flex-col gap-y-6"
+    class="mx-auto w-full max-w-3xl xl:max-w-[1440px] flex flex-col gap-y-6"
   >
-    <div class="flex flex-col gap-y-8 xl:grid xl:grid-cols-[260px_minmax(0,780px)_260px] xl:gap-x-8 xl:gap-y-6 xl:justify-center animate-fade-in-up">
+    <div class="flex flex-col gap-y-8 xl:grid xl:grid-cols-[240px_minmax(0,740px)_340px] xl:gap-x-8 xl:gap-y-6 xl:justify-center animate-fade-in-up">
       <div class="hidden xl:block"></div>
       <div class="flex flex-col gap-y-6 text-start">
         <div>
@@ -65,7 +96,35 @@ const currentUrl = Astro.url;
             {project.data.name}
           </h1>
 
-          <div class="flex flex-wrap justify-start gap-2">
+          <div class="my-6 rounded-xl overflow-hidden w-full aspect-video border border-border/50 bg-muted">
+            <Image
+              src={project.data.image}
+              alt={project.data.name}
+              class="w-full h-full object-cover"
+              format="webp"
+              fetchpriority="high"
+              loading="eager"
+              decoding="async"
+              width={1200}
+              height={800}
+            />
+          </div>
+
+          <div class="flex flex-wrap items-center justify-start gap-2">
+            <span
+              title={currentStatus.hint}
+              class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium border border-border/60 bg-secondary/50 text-foreground/80 shadow-2xs"
+            >
+              <span
+                class:list={[
+                  'w-1.5 h-1.5 rounded-full',
+                  currentStatus.dot,
+                  currentStatus.pulse && 'animate-pulse',
+                ]}
+              />
+              {currentStatus.label}
+            </span>
+
             {
               project.data.tags && project.data.tags.length > 0 ? (
                 project.data.tags.map((tag) => (
@@ -89,7 +148,7 @@ const currentUrl = Astro.url;
       <div class="hidden xl:block"></div>
     </div>
 
-    <div class="flex flex-col gap-y-8 xl:grid xl:grid-cols-[260px_minmax(0,780px)_260px] xl:gap-x-8 xl:gap-y-6 xl:justify-center">
+    <div class="flex flex-col gap-y-8 xl:grid xl:grid-cols-[240px_minmax(0,740px)_340px] xl:gap-x-8 xl:gap-y-6 xl:justify-center">
       <div class="order-1 xl:order-none">
         <div class="xl:sticky xl:top-24">
           {headings.length > 0 && <TableOfContents headings={headings} />}
@@ -98,26 +157,32 @@ const currentUrl = Astro.url;
 
       <div class="order-2 xl:order-none flex flex-col gap-y-12 min-w-0 max-w-none">
         <article class="prose dark:prose-invert min-w-0 max-w-none" aria-label="Project">
-          <Image
-            src={project.data.image}
-            alt={project.data.name}
-            class="mb-8 w-full rounded-2xl object-cover shadow-sm border border-border/50"
-            loading="lazy"
-            fetchpriority="low"      
-            width={1200}
-            height={800}
-          />
           <Content />
         </article>
       </div>
 
-      <div class="order-3 xl:order-none">
+      <div class="order-3 xl:order-none" id="project-details">
         <div class="xl:sticky xl:top-24">
           <aside
             class="group rounded-xl border p-4 xl:rounded-none xl:border-none xl:p-0"
           >
         <div class="flex flex-col gap-4 rounded-xl border bg-card p-4 shadow-md transition-all duration-300">
-          <h2 class="text-lg font-semibold">Project Details</h2>
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold">Project Details</h2>
+            <span
+              title={currentStatus.hint}
+              class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-medium border border-border/60 bg-secondary/50 text-foreground/80 shadow-2xs"
+            >
+              <span
+                class:list={[
+                  'w-1.5 h-1.5 rounded-full',
+                  currentStatus.dot,
+                  currentStatus.pulse && 'animate-pulse',
+                ]}
+              />
+              {currentStatus.label}
+            </span>
+          </div>
           <div class="flex flex-col gap-2 text-sm text-muted-foreground">
             <p>{project.data.description}</p>
           </div>
@@ -134,6 +199,80 @@ const currentUrl = Astro.url;
               </li>
             </ul>
           </div>
+
+          <hr class="my-4 border-t" />
+
+          <div class="flex flex-col gap-2 text-sm text-muted-foreground">
+            <h3 class="text-base font-semibold text-foreground">Share this project</h3>
+            <div class="flex flex-wrap gap-2">
+              <Link
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(Astro.site + 'projects/' + project.id)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Share on Facebook"
+                aria-label="Share on Facebook"
+              >
+                <Button variant="outline" size="icon" aria-label="Share on Facebook" className="group">
+                  <Icon name="line-md:facebook" class="size-4 draw-icon group-hover:text-primary transition-colors duration-300" />
+                </Button>
+              </Link>
+              <Link
+                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(Astro.site + 'projects/' + project.id)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Share on Twitter"
+                aria-label="Share on Twitter"
+              >
+                <Button variant="outline" size="icon" aria-label="Share on Twitter" className="group">
+                  <Icon name="line-md:twitter-x" class="size-4 draw-icon group-hover:text-primary transition-colors duration-300" />
+                </Button>
+              </Link>
+              <Link
+                href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(Astro.site + 'projects/' + project.id)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Share on LinkedIn"
+                aria-label="Share on LinkedIn"
+              >
+                <Button variant="outline" size="icon" aria-label="Share on LinkedIn" className="group">
+                  <Icon name="line-md:linkedin" class="size-4 draw-icon group-hover:text-primary transition-colors duration-300" />
+                </Button>
+              </Link>
+              <Link
+                href={`https://www.reddit.com/submit?url=${encodeURIComponent(Astro.site + 'projects/' + project.id)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Share on Reddit"
+                aria-label="Share on Reddit"
+              >
+                <Button variant="outline" size="icon" aria-label="Share on Reddit" className="group">
+                  <Icon name="line-md:reddit-loop" class="size-4 draw-icon group-hover:text-primary transition-colors duration-300" />
+                </Button>
+              </Link>
+              <Link
+                href={`https://wa.me/?text=${encodeURIComponent(Astro.site + 'projects/' + project.id)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Share on WhatsApp"
+                aria-label="Share on WhatsApp"
+              >
+                <Button variant="outline" size="icon" aria-label="Share on WhatsApp" className="group">
+                  <Icon name="mdi:whatsapp" class="size-4 draw-icon group-hover:text-primary transition-colors duration-300" />
+                </Button>
+              </Link>
+              <Link
+                href={`https://t.me/share/url?url=${encodeURIComponent(Astro.site + 'projects/' + project.id)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Share on Telegram"
+                aria-label="Share on Telegram"
+              >
+                <Button variant="outline" size="icon" aria-label="Share on Telegram" className="group">
+                  <Icon name="line-md:telegram" class="size-4 draw-icon group-hover:text-primary transition-colors duration-300" />
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </aside>
         </div>
@@ -141,4 +280,43 @@ const currentUrl = Astro.url;
     </div>
 
   </section>
+
+  {headings.length > 0 && <MobileTOC client:load headings={headings} title={project.data.name} />}
+
+  <Button
+    variant="outline"
+    size="icon"
+    className="group fixed right-8 bottom-8 z-50 hidden"
+    id="scroll-to-top"
+    title="Scroll to top"
+    aria-label="Scroll to top"
+  >
+    <Icon
+      name="lucide:arrow-up"
+      class="mx-auto size-4 transition-all group-hover:-translate-y-0.5"
+    />
+  </Button>
+
+  <script>
+    document.addEventListener('astro:page-load', () => {
+      const scrollToTopButton = document.getElementById('scroll-to-top')
+      const footer = document.querySelector('footer')
+
+      if (scrollToTopButton && footer) {
+        scrollToTopButton.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        })
+
+        window.addEventListener('scroll', () => {
+          const footerRect = footer.getBoundingClientRect()
+          const isFooterVisible = footerRect.top <= window.innerHeight
+
+          scrollToTopButton.classList.toggle(
+            'hidden',
+            window.scrollY <= 300 || isFooterVisible
+          )
+        })
+      }
+    })
+  </script>
 </Layout>

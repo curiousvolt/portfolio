@@ -1,33 +1,54 @@
 ---
 name: 'Govind Bhavan Portal'
-description: 'A robust, full-stack student management system engineered for high-performance residential governance.'
+description: 'A comprehensive residential governance platform engineered for 500+ residents. Features automated dining rebate calculations with strict threshold constraints, granular role-based access control (RBAC), and real-time operational workflows.'
 tags: ['react', 'node', 'mongodb', 'tailwind']
 image: './homepage_hero.png'
 link: 'https://github.com/curiousvolt/govind-bhavan'
 startDate: '2023-08-01'
 endDate: '2023-12-01'
+status: 'Building'
 ---
 
 ## Overview
 
-The Govind Bhavan Portal is a robust, full-stack student management system engineered for high-performance residential governance.
+The Govind Bhavan Portal is a centralized management system engineered to digitize residential operations and student administration for a multi-story university residence. The platform replaces paper-driven logs and ad-hoc communication with automated rebate processing, facility booking, and real-time operational transparency.
 
-## 🏗 Architecture & Design Patterns
+## Architecture
 
-The portal is built using a decoupled, full-stack architecture designed for scalability, security, and maintainable state management. 
+The system utilizes a decoupled client-server architecture designed for high availability, low-latency data access, and maintainable state boundaries.
 
-- **Backend**: Node.js Express server providing a RESTful API layer with Mongoose for MongoDB data modeling.
-- **Frontend**: React 19 optimized with Vite for lightning-fast HMR and low-latency production builds.
-- **Styling**: Tailwind CSS v4 utilizing a custom tokens-based design system for UI consistency.
-- **State Management**: Atomic React Context providers segmented by domain (Auth, Mess, Student Data).
+- **Client Layer**: Built with React and bundled via Vite for optimized asset chunking and sub-second Hot Module Replacement (HMR). Global state is isolated across focused React Context providers (Authentication, Mess Rebates, Facilities) to prevent unnecessary re-render cycles.
+- **API Service**: A RESTful Node.js and Express service layer handling request validation, business logic enforcement, and secure database interactions.
+- **Data Persistence**: MongoDB managed through Mongoose, leveraging indexed document schemas for efficient lookups across student rosters, rebate claims, and facility registries.
 
-## 🚀 Key Technical Features
+## Core Implementations
 
-### 🔐 Security & Role-Based Access (RBAC)
-- **Granular Scoping**: All API endpoints and frontend views are strictly scoped based on the authenticated user's role (`Admin` vs. `Student`) and unique MongoDB `_id`.
-- **Validation**: Mission-critical data mutations (Guest Bookings, Mess Rebates, Event Registration) are protected by server-side Zod validators to ensure business logic integrity.
+### Role-Based Access Control
 
-### 📊 Data Intelligence & Management
-- **Enterprise CSV Export**: A custom-built serialization utility leveraging the `file-saver` engine to bypass cross-browser blob restrictions, ensuring clean, formatted data exports.
-- **Dynamic Mess Management**: A rating-weighted dining system allowing students to provide real-time sentiment analysis for daily meals.
-- **Event Orchestration**: High-concurrency event registration system with real-time capacity monitoring and automated expiry tracking.
+User authentication is implemented using signed JSON Web Tokens (JWT) stored in HTTP-only cookies to mitigate XSS exposure. A centralized authorization middleware inspects token claims to enforce granular role boundaries:
+
+- **Student Scope**: Query personal profile records, submit rebate requests within active temporal windows, view dining schedules, and register for residential events.
+- **Administrator Scope**: Review, approve, or reject student rebate submissions, manage residential room allocation matrices, post public notices, and export audit reports.
+
+### Mess Rebate Calculation Engine
+
+The rebate subsystem automates dining fee adjustments based on pre-defined institutional policies:
+
+- Requests must satisfy strict temporal window constraints (minimum 48-hour advance notice).
+- Continuous absence rules enforce automatic minimum and maximum day limits per academic term.
+- Concurrent rebate requests within overlapping date intervals are rejected via server-side schema constraints.
+
+### Data Export and Administrative Tools
+
+To assist accounting and audit workflows, the administrative interface includes a custom serialization pipeline:
+
+- Generates structured CSV summaries of approved dining rebates and facility reservations.
+- Leverages client-side blob streaming to process multi-megabyte datasets without blocking the main browser thread.
+- Enforces strict input validation on all export query parameters to ensure date-bounded queries hit appropriate MongoDB compound indexes.
+
+## Technology Stack
+
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS, Lucide Icons
+- **Backend**: Node.js, Express, Zod (runtime request validation)
+- **Database**: MongoDB with Mongoose ODM
+- **Authentication**: JWT, bcryptjs password hashing

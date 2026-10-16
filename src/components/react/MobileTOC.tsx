@@ -1,42 +1,94 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X } from 'lucide-react'
+import { X, Share2, Check } from 'lucide-react'
 import type { MarkdownHeading } from 'astro'
 
-export const MobileTOC = ({ headings }: { headings: MarkdownHeading[] }) => {
+export const MobileTOC = ({
+  headings,
+  title,
+}: {
+  headings: MarkdownHeading[]
+  title?: string
+}) => {
   const [isOpen, setIsOpen] = useState(false)
   const [activeId, setActiveId] = useState<string>('')
   const [progress, setProgress] = useState(0)
-  const [isVisible, setIsVisible] = useState(false)
+  const [isAtEnd, setIsAtEnd] = useState(false)
+  const [isIdle, setIsIdle] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  const idleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isInteractingRef = useRef(false)
+  const copiedRef = useRef(false)
+
+  useEffect(() => {
+    copiedRef.current = copied
+  }, [copied])
+
+  const resetIdleTimer = useCallback(() => {
+    setIsIdle(false)
+    if (idleTimeoutRef.current) {
+      clearTimeout(idleTimeoutRef.current)
+    }
+    idleTimeoutRef.current = setTimeout(() => {
+      // Only hide if the user is not touching/hovering and not showing the copied confirmation
+      if (!isInteractingRef.current && !copiedRef.current) {
+        setIsIdle(true)
+      }
+    }, 1000)
+  }, [])
+
+  const handleInteractionStart = () => {
+    isInteractingRef.current = true
+    setIsIdle(false)
+    if (idleTimeoutRef.current) {
+      clearTimeout(idleTimeoutRef.current)
+    }
+  }
+
+  const handleInteractionEnd = () => {
+    isInteractingRef.current = false
+    resetIdleTimer()
+  }
 
   useEffect(() => {
     const handleScroll = () => {
       // Calculate reading progress
       const winScroll = document.body.scrollTop || document.documentElement.scrollTop
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight
-      const scrolled = (winScroll / height) * 100
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0
       setProgress(scrolled)
 
       // Hide pill when user reaches the post navigation / bottom area
-      const postNav = document.getElementById('post-navigation')
+      const postNav =
+        document.getElementById('post-navigation') ||
+        document.getElementById('project-details')
       if (postNav) {
         const rect = postNav.getBoundingClientRect()
-        // If the post navigation is in view (or above), hide the pill
         if (rect.top <= window.innerHeight) {
-          setIsVisible(false)
+          setIsAtEnd(true)
         } else {
-          setIsVisible(true)
+          setIsAtEnd(false)
         }
       } else {
         // Fallback: hide if > 95% scrolled
-        setIsVisible(scrolled < 95)
+        setIsAtEnd(scrolled >= 95)
+      }
+
+      // Reappear and reset idle fade timer on scroll
+      resetIdleTimer()
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll() // Trigger once on mount
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (idleTimeoutRef.current) {
+        clearTimeout(idleTimeoutRef.current)
       }
     }
-    
-    window.addEventListener('scroll', handleScroll)
-    handleScroll() // Trigger once on mount
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [resetIdleTimer])
 
   useEffect(() => {
     // Determine active heading based on scroll position
@@ -58,44 +110,141 @@ export const MobileTOC = ({ headings }: { headings: MarkdownHeading[] }) => {
     // Observe all headings inside the prose article
     const sectionElements = document.querySelectorAll('.prose h2, .prose h3, .prose h4')
     sectionElements.forEach((el) => observer.observe(el))
-    
+
     return () => observer.disconnect()
   }, [])
 
-  const activeHeading = headings.find(h => h.slug === activeId) || headings[0]
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    resetIdleTimer()
+
+    const shareData = {
+      title: title || document.title,
+      url: window.location.href,
+    }
+
+    if (typeof navigator !== 'undefined' && navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData)
+        return
+      } catch (err: any) {
+        if (err?.name === 'AbortError') return
+      }
+    }
+
+    // Fallback: copy link to clipboard
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(window.location.href)
+      } else {
+        const textArea = document.createElement('textarea')
+        textArea.value = window.location.href
+        document.body.appendChild(textArea)
+        textArea.select()
+        ;(document as any).execCommand?.('copy')
+        document.body.removeChild(textArea)
+      }
+      setCopied(true)
+      setTimeout(() => {
+        setCopied(false)
+        resetIdleTimer()
+      }, 2000)
+    } catch {
+      // No-op if copying fails
+    }
+  }
+
+  const activeHeading = headings.find((h) => h.slug === activeId) || headings[0]
   const radius = 8
   const circumference = 2 * Math.PI * radius
   const strokeDashoffset = circumference - (progress / 100) * circumference
 
   if (!headings || headings.length === 0) return null
 
+  const shouldShowBar = !isAtEnd && !isIdle && !isOpen
+
   return (
     <div className="xl:hidden">
-      {/* Floating Pill */}
+      {/* Floating Bottom Bar: Reduced Width Pill + Circular Share Button */}
       <AnimatePresence>
-        {isVisible && !isOpen && (
+        {shouldShowBar && (
           <motion.div
-            initial={{ y: 100, opacity: 0 }}
+            initial={{ y: 24, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-sm"
+            exit={{ y: 24, opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            style={{ bottom: 'max(1.5rem, calc(0.75rem + env(safe-area-inset-bottom, 0px)))' }}
+            className="fixed left-1/2 -translate-x-1/2 z-50 flex items-center justify-center gap-2.5 max-w-[calc(100vw-2rem)]"
+            onMouseEnter={handleInteractionStart}
+            onMouseLeave={handleInteractionEnd}
+            onTouchStart={handleInteractionStart}
+            onTouchEnd={handleInteractionEnd}
           >
+            {/* TOC Navigation Pill */}
             <button
               onClick={() => setIsOpen(true)}
-              className="w-full flex items-center justify-between gap-3 px-5 py-3.5 bg-background/90 backdrop-blur-xl border border-border shadow-2xl rounded-full text-sm font-medium"
+              aria-label="Open table of contents"
+              className="flex items-center justify-between gap-2.5 h-11 sm:h-12 px-3.5 sm:px-4 bg-background/90 backdrop-blur-xl border border-border shadow-xl rounded-full text-sm font-medium w-[220px] sm:w-[250px] max-w-[calc(100vw-5.5rem)] select-none hover:border-primary/40 active:scale-[0.98] transition-all cursor-pointer"
             >
-              <div className="flex items-center gap-3 overflow-hidden text-left">
+              <div className="flex items-center gap-2 sm:gap-2.5 overflow-hidden text-left min-w-0">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                <span className="truncate">{activeHeading?.text.replace(/<[^>]+>/g, '') || "Table of Contents"}</span>
+                <span className="truncate text-xs sm:text-sm text-foreground/90 font-medium">
+                  {activeHeading?.text.replace(/<[^>]+>/g, '') || 'Table of Contents'}
+                </span>
               </div>
               <div className="shrink-0 relative w-6 h-6 flex items-center justify-center">
-                 <svg className="transform -rotate-90 w-6 h-6">
-                    <circle cx="12" cy="12" r={radius} stroke="currentColor" strokeWidth="2" fill="transparent" className="text-foreground/20" />
-                    <circle cx="12" cy="12" r={radius} stroke="currentColor" strokeWidth="2" fill="transparent" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} className="text-primary transition-all duration-300" />
-                 </svg>
+                <svg className="transform -rotate-90 w-6 h-6">
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r={radius}
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    fill="transparent"
+                    className="text-foreground/20"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r={radius}
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    fill="transparent"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={strokeDashoffset}
+                    className="text-primary transition-all duration-300"
+                  />
+                </svg>
               </div>
             </button>
+
+            {/* Circular Share Button */}
+            <div className="relative shrink-0">
+              <button
+                onClick={handleShare}
+                aria-label="Share this article"
+                className="h-11 w-11 sm:h-12 sm:w-12 rounded-full flex items-center justify-center bg-background/90 backdrop-blur-xl border border-border shadow-xl text-foreground/80 hover:text-foreground hover:border-primary/40 active:scale-95 transition-all cursor-pointer"
+              >
+                {copied ? (
+                  <Check size={18} className="text-emerald-500" />
+                ) : (
+                  <Share2 size={18} className="text-foreground/80" />
+                )}
+              </button>
+              <AnimatePresence>
+                {copied && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6, scale: 0.9 }}
+                    animate={{ opacity: 1, y: -8, scale: 1 }}
+                    exit={{ opacity: 0, y: 4, scale: 0.9 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute -top-7 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-md bg-foreground text-background text-[11px] font-semibold shadow-md whitespace-nowrap pointer-events-none"
+                  >
+                    Copied!
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -112,14 +261,16 @@ export const MobileTOC = ({ headings }: { headings: MarkdownHeading[] }) => {
               onClick={() => setIsOpen(false)}
             />
             <motion.div
-              initial={{ y: "100%" }}
+              initial={{ y: '100%' }}
               animate={{ y: 0 }}
-              exit={{ y: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border rounded-t-3xl shadow-2xl flex flex-col max-h-[80vh]"
             >
               <div className="flex items-center justify-between p-6 border-b border-border/50">
-                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Table of Contents</h3>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+                  Table of Contents
+                </h3>
                 <button onClick={() => setIsOpen(false)} className="p-2 -m-2">
                   <X size={18} className="text-muted-foreground" />
                 </button>
@@ -135,7 +286,9 @@ export const MobileTOC = ({ headings }: { headings: MarkdownHeading[] }) => {
                       className={`block text-sm transition-colors relative ${isActive ? 'text-primary font-bold' : 'text-foreground/70 hover:text-foreground'}`}
                       style={{ marginLeft: `${(heading.depth - 2) * 1}rem` }}
                     >
-                      {isActive && <span className="absolute -left-4 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-primary" />}
+                      {isActive && (
+                        <span className="absolute -left-4 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-primary" />
+                      )}
                       {heading.text.replace(/<[^>]+>/g, '')}
                     </a>
                   )

@@ -1,5 +1,4 @@
 ---
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { cn } from '@/lib/utils'
 import type { MarkdownHeading } from 'astro'
 import { Icon } from 'astro-icon/components'
@@ -55,10 +54,8 @@ function cleanupHeading(text: string): string {
     </div>
   </summary>
 
-  <ScrollArea
-    client:load
-    className="flex max-h-64 flex-col overflow-y-auto xl:max-h-[calc(100vh-8rem)]"
-    type="always"
+  <div
+    class="flex max-h-64 flex-col overflow-y-auto xl:max-h-[calc(100vh-8rem)] pr-2"
   >
     <ul
       class="flex list-none flex-col gap-y-2 px-4 xl:mr-8"
@@ -84,7 +81,7 @@ function cleanupHeading(text: string): string {
         ))
       }
     </ul>
-  </ScrollArea>
+  </div>
 </details>
 
 <script>
@@ -92,31 +89,33 @@ function cleanupHeading(text: string): string {
     const header = document.querySelector('header')
     const headerHeight = header ? header.offsetHeight : 0
 
-    const observer = new IntersectionObserver(
-      (sections) => {
-        sections.forEach((section) => {
-          const heading = section.target.querySelector('h2, h3, h4, h5, h6')
-          if (!heading) return
+    const headings = document.querySelectorAll('.prose h2, .prose h3, .prose h4')
+    if (!headings.length) return
 
-          const id = heading.getAttribute('id')
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = entry.target.getAttribute('id')
+          if (!id) return
           const link = document.querySelector(
             `#table-of-contents li a[href="#${id}"]`
           )
           if (!link) return
 
-          const addRemove = section.isIntersecting ? 'add' : 'remove'
-          link.classList[addRemove]('text-foreground')
+          if (entry.isIntersecting) {
+            document
+              .querySelectorAll('#table-of-contents li a')
+              .forEach((l) => l.classList.remove('text-foreground', 'font-medium'))
+            link.classList.add('text-foreground', 'font-medium')
+          }
         })
       },
       {
-        rootMargin: `-${headerHeight}px 0px 0px 0px`,
+        rootMargin: `-${headerHeight + 20}px 0px -60% 0px`,
       }
     )
 
-    const sections = document.querySelectorAll('.prose section')
-    sections.forEach((section) => {
-      observer.observe(section)
-    })
+    headings.forEach((heading) => observer.observe(heading))
   }
 
   document.addEventListener('astro:page-load', setupToc)

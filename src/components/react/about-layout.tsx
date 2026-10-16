@@ -1,24 +1,26 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { GithubRepoCard } from './github-repo-card'
 import { SideProjectCard } from './side-project-card'
 import { MediaCard } from './media-card'
-import { SITE, GITHUB_REPOS } from '@/consts'
+import { SITE } from '@/consts'
 import type { GitHubRepo } from '@/consts'
 import type { CollectionEntry } from 'astro:content'
-import { Folder, Github, Mail, FileText, Star, GitFork } from 'lucide-react'
-
-
+import { Folder, Github, Mail, FileText, Star, GitFork, Linkedin } from 'lucide-react'
 
 export const AboutContent = ({ 
   initialGraphSvg, 
   githubData,
   sideProjects,
-  media
+  media,
+  totalContributions = 100,
+  contributionYear = 2026
 }: { 
   initialGraphSvg?: string | null,
   githubData: { repos: GitHubRepo[], stars: string, forks: string },
   sideProjects: CollectionEntry<'sideProjects'>[],
-  media: CollectionEntry<'media'>[]
+  media: CollectionEntry<'media'>[],
+  totalContributions?: number,
+  contributionYear?: number
 }) => {
   const [activeTab, setActiveTab] = useState<'side' | 'github'>('side')
   const repos = githubData.repos
@@ -29,7 +31,7 @@ export const AboutContent = ({
   // Github data is now fetched at build time in about.astro
 
   return (
-    <div className="flex flex-col items-center w-full max-w-3xl mx-auto py-12 px-4 sm:px-0">
+    <div className="flex flex-col items-center w-full max-w-5xl mx-auto py-4 px-0">
       {/* Profile Header */}
       <div className="flex justify-between items-center w-full mb-6 animate-in fade-in slide-in-from-top-4 duration-700">
         <div className="flex items-center gap-3 sm:gap-4">
@@ -46,10 +48,28 @@ export const AboutContent = ({
             onMouseEnter={(e) => { e.currentTarget.href = `mailto:${SITE.email}` }}
             className="group w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-secondary/50 flex items-center justify-center hover:bg-secondary border border-border/30 transition-colors duration-300"
             aria-label="Email"
+            title="Email"
           >
             <Mail size={18} className="text-foreground/80 draw-icon transition-colors duration-300 group-hover:text-primary" />
           </a>
-          <a href="https://twitter.com/CuriousVolt" target="_blank" className="group w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-secondary/50 flex items-center justify-center hover:bg-secondary border border-border/30 transition-colors duration-300">
+          <a 
+            href="https://www.linkedin.com/in/curiousvolt" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="group w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-secondary/50 flex items-center justify-center hover:bg-secondary border border-border/30 transition-colors duration-300"
+            aria-label="LinkedIn"
+            title="LinkedIn"
+          >
+            <Linkedin size={18} className="text-foreground/80 draw-icon transition-colors duration-300 group-hover:text-primary" />
+          </a>
+          <a 
+            href="https://x.com/CuriousVolt" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="group w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-secondary/50 flex items-center justify-center hover:bg-secondary border border-border/30 transition-colors duration-300"
+            aria-label="X (Twitter)"
+            title="X (Twitter)"
+          >
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
               width={18} 
@@ -73,11 +93,12 @@ export const AboutContent = ({
         Hi! I'm {SITE.author.split(' ')[0]}, a developer and creator based in {SITE.location}. Check out my work below and get to know me a bit through this little site!
       </p>
 
-      <div className="w-full flex items-center gap-3 mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
+      <div className="w-full flex flex-wrap items-center gap-3 mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
         <a 
-          href="/resume.pdf" 
+          href="/resume?reference=resume" 
           target="_blank"
-          className="group flex items-center gap-2 px-6 py-2.5 border border-border/50 bg-secondary/30 hover:bg-secondary text-foreground text-sm font-bold rounded-full transition-all duration-300"
+          rel="noopener noreferrer"
+          className="group flex items-center gap-2 px-6 py-2.5 border border-border/50 bg-secondary/30 hover:bg-secondary text-foreground text-sm font-bold rounded-full transition-all duration-300 shadow-2xs"
         >
           <FileText size={16} className="text-primary group-hover:scale-110 transition-transform" />
           Download Resume
@@ -85,13 +106,15 @@ export const AboutContent = ({
         <a
           href="https://substack.com/@curiousvolt"
           target="_blank"
-          className="group flex items-center justify-center w-[42px] h-[42px] border border-border/50 bg-secondary/30 hover:bg-secondary text-foreground rounded-full transition-all duration-300"
+          rel="noopener noreferrer"
+          className="group flex items-center gap-2 px-5 py-2.5 border border-border/50 bg-secondary/30 hover:bg-secondary text-foreground text-sm font-bold rounded-full transition-all duration-300 shadow-2xs"
           aria-label="Substack"
           title="Substack"
         >
-          <svg role="img" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="text-[#FF6719] group-hover:scale-110 transition-transform">
+          <svg role="img" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="text-[#FF6719] group-hover:scale-110 transition-transform shrink-0">
             <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
           </svg>
+          <span>Substack</span>
         </a>
       </div>
 
@@ -161,8 +184,8 @@ export const AboutContent = ({
                   <div className="w-full border border-border/40 rounded-2xl p-6 bg-card/40 flex flex-col gap-6 items-center animate-in fade-in slide-in-from-bottom-8 duration-700" style={{ animationDelay: '350ms', animationFillMode: 'both' }}>
                     <div className="flex-1 w-full flex flex-col gap-2">
                         <div className="flex items-center justify-between text-sm mb-2">
-                          <div className="flex items-center gap-2 font-bold"><Github size={16}/> @CuriousVolt <span className="font-normal text-muted-foreground text-xs hidden sm:inline">Contribution Graph</span></div>
-                          <div className="text-xs font-bold">1947 <span className="text-muted-foreground font-normal uppercase">2025 Total</span></div>
+                          <div className="flex items-center gap-2 font-bold"><Github size={16}/> @curiousvolt <span className="font-normal text-muted-foreground text-xs hidden sm:inline">Contribution Graph</span></div>
+                          <div className="text-xs font-bold">{totalContributions.toLocaleString()} <span className="text-muted-foreground font-normal uppercase">in {contributionYear}</span></div>
                         </div>
                         {/* Live Graph from Server */}
                         <div className="w-full h-32 sm:h-40 rounded-lg flex items-center justify-center p-2 sm:p-4

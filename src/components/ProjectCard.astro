@@ -1,0 +1,124 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { Image } from 'astro:assets'
+import { Icon } from 'astro-icon/components'
+
+interface Props {
+  project: CollectionEntry<'projects'>
+}
+
+const { project } = Astro.props
+const status = project.data.status || 'Building'
+
+// Subtle, non-punchy status indicators with neutral styling
+const statusConfig: Record<string, { dot: string; pulse: boolean; label: string; hint: string }> = {
+  Shipped: {
+    dot: 'bg-emerald-500',
+    pulse: false,
+    label: 'Shipped',
+    hint: 'Live project available to use',
+  },
+  Building: {
+    dot: 'bg-amber-400',
+    pulse: true,
+    label: 'Building',
+    hint: 'Currently in active development',
+  },
+  Prototype: {
+    dot: 'bg-sky-400',
+    pulse: false,
+    label: 'Prototype',
+    hint: 'Early version / experiment',
+  },
+}
+
+// Proper tag formatting map (React, Node.js, MongoDB, etc.)
+const tagDisplayMap: Record<string, string> = {
+  react: 'React',
+  node: 'Node.js',
+  mongodb: 'MongoDB',
+  tailwind: 'Tailwind CSS',
+  typescript: 'TypeScript',
+  paypal: 'PayPal',
+  nextjs: 'Next.js',
+  astro: 'Astro',
+  python: 'Python',
+  docker: 'Docker',
+  express: 'Express',
+  javascript: 'JavaScript',
+}
+
+function formatTag(tag: string): string {
+  return tagDisplayMap[tag.toLowerCase()] || tag
+}
+
+const currentConfig = statusConfig[status] || statusConfig.Building
+---
+
+<div class="group w-full transition-all duration-300 hover:translate-y-[-4px]">
+  <a
+    class="flex flex-col w-full rounded-2xl overflow-hidden bg-card hover:shadow-lg transition-all duration-300 border border-card-foreground/10 relative"
+    href={`/projects/${project.id}`}
+    aria-label={`View project ${project.data.name}`}
+  >
+    <!-- Image & Status Badge -->
+    <div class="aspect-[16/10] w-full overflow-hidden relative">
+      <Image
+        alt={project.data.name}
+        src={project.data.image}
+        class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        loading="lazy"
+        fetchpriority="low"
+        width={600}
+        height={375}
+      />
+      <!-- Neutral Frosted Status Pill -->
+      <div class="absolute top-3 left-3 z-10">
+        <span
+          title={currentConfig.hint}
+          class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono tracking-tight bg-background/85 dark:bg-[#161616]/85 backdrop-blur-md text-foreground/80 border border-border/60 shadow-xs"
+        >
+          <span
+            class:list={[
+              'w-1.5 h-1.5 rounded-full',
+              currentConfig.dot,
+              currentConfig.pulse && 'animate-pulse',
+            ]}
+          />
+          {currentConfig.label}
+        </span>
+      </div>
+    </div>
+
+    <!-- Content: Clean, natural height without extra stretched bottom space -->
+    <div class="flex flex-col p-4 sm:p-5">
+      <div>
+        <h3 class="text-lg sm:text-xl font-medium text-foreground mb-1.5 group-hover:text-primary transition-colors duration-200">
+          {project.data.name}
+        </h3>
+        <p class="text-xs sm:text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+          {project.data.description || 'An innovative project showcasing creativity and technical skills'}
+        </p>
+      </div>
+
+      <div class="flex flex-wrap justify-between items-center mt-3 pt-3 border-t border-border/40">
+        <div class="flex flex-wrap gap-1.5">
+          {project.data.tags?.slice(0, 3).map((tag) => (
+            <span class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-secondary/60 text-muted-foreground border border-border/40">
+              {formatTag(tag)}
+            </span>
+          ))}
+          {project.data.tags && project.data.tags.length > 3 && (
+            <span class="text-[11px] font-medium px-2 py-0.5 rounded-full bg-secondary/40 text-muted-foreground/70 border border-border/40">
+              +{project.data.tags.length - 3}
+            </span>
+          )}
+        </div>
+        <p class="text-[11px] font-mono text-muted-foreground flex items-center">
+          <Icon name="lucide:calendar" class="h-3 w-3 mr-1 opacity-70" />
+          {project.data.endDate ? new Date(project.data.endDate).getFullYear() : 'Present'}
+        </p>
+      </div>
+    </div>
+  </a>
+</div>

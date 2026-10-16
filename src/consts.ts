@@ -3,7 +3,7 @@ import type { IconMap, SocialLink, Site } from '@/types'
 export const SITE: Site = {
   title: 'CuriousVolt',
   description:
-    "I'm an electrical engineer - or so I'm told. That's the \"Volt.\" The \"Curious\" part is me poking my nose into everything else, experimenting, breaking things, and learning along the way. This is what I've picked up from doing, not just academics.",
+    "I'm an electrical engineer by degree - or so I'm told. That's the \"Volt.\" The \"Curious\" part is me poking my nose into everything else, building products, experimenting, breaking things, and learning along the way. This is what I've picked up from doing, not just academics.",
   href: 'https://www.curiousvolt.is-a.dev',
   author: 'Aman Kumar',
   locale: 'en-US',
@@ -32,6 +32,10 @@ export const SOCIAL_LINKS: SocialLink[] = [
     label: 'GitHub',
   },
   {
+    href: 'https://www.linkedin.com/in/curiousvolt',
+    label: 'LinkedIn',
+  },
+  {
     href: 'mailto:itscuriousvolt@gmail.com',
     label: 'Email',
   },
@@ -52,6 +56,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
 export const ICON_MAP: IconMap = {
   Website: 'lucide:globe',
   GitHub: 'lucide:github',
+  LinkedIn: 'lucide:linkedin',
   Instagram: 'lucide:instagram',
   Phone: 'lucide:phone',
   Email: 'lucide:mail',

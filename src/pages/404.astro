@@ -35,21 +35,22 @@ const currentUrl = Astro.url;
     <div class="max-w-md">
       <h1 class="mb-4 text-3xl font-medium">404: Page Not Found</h1>
       <p class="prose mb-4">Oops! The page you're looking for doesn't exist. It might have been moved, deleted, or you entered the wrong URL.</p>
-      <p class="prose text-sm text-muted-foreground">Looking for something specific? Try searching our blog or browse our latest articles.</p>
+      <p class="prose text-sm text-muted-foreground">Looking for something specific? Check out my latest projects or head back to the homepage.</p>
     </div>
     <div class="flex flex-col sm:flex-row gap-3">
       <Link
         href="/"
-        class={cn(buttonVariants({ variant: 'default' }), 'flex gap-x-1.5 group transition-all duration-300 hover:shadow-md')}
+        class={cn(buttonVariants({ variant: 'default' }), 'flex items-center gap-x-1.5 group transition-all duration-300 hover:shadow-md')}
       >
         <span class="transition-transform group-hover:-translate-x-1">&larr;</span>
-        Go to Home
+        Back to Home
       </Link>
       <Link
-        href="/blog"
-        class={cn(buttonVariants({ variant: 'outline' }), 'flex gap-x-1.5 transition-all duration-300 hover:bg-secondary')}
+        href="/projects"
+        class={cn(buttonVariants({ variant: 'outline' }), 'flex items-center gap-x-1.5 transition-all duration-300 hover:bg-secondary')}
       >
-        Browse Blog
+        Explore Projects
+        <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
       </Link>
     </div>
   </section>

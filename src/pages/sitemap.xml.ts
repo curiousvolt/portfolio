@@ -43,6 +43,13 @@ export const GET: APIRoute = async (context) => {
   });
 
   urls.push({
+    loc: `${baseUrl}/about/`,
+    lastmod: formatDate(now),
+    changefreq: 'monthly',
+    priority: 0.9
+  });
+
+  urls.push({
     loc: `${baseUrl}/blog/`,
     lastmod: formatDate(latestBlogDate),
     changefreq: 'weekly',
@@ -60,7 +67,7 @@ export const GET: APIRoute = async (context) => {
     loc: `${baseUrl}/tags/`,
     lastmod: formatDate(latestTagsDate),
     changefreq: 'weekly',
-    priority: 0.9
+    priority: 0.8
   });
 
   for (const post of blogPosts) {

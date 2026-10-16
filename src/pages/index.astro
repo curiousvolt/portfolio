@@ -2,18 +2,17 @@
 import Link from '@/components/Link.astro'
 import PageHead from '@/components/PageHead.astro'
 import BlogCard from '@/components/react/blog-card'
-import { LogCard } from '@/components/react/log-card'
+import ProjectTimelineCard from '@/components/ProjectTimelineCard.astro'
 import { buttonVariants } from '@/components/ui/button'
 import Logo from '@/components/ui/logo'
 import Layout from '@/layouts/Layout.astro'
-import { getRecentPosts } from '@/lib/data-utils'
+import { getRecentPosts, getAllProjects } from '@/lib/data-utils'
 import { SITE } from '@/consts'
-import { getCollection } from 'astro:content'
+import { Icon } from 'astro-icon/components'
+import { HeroKineticRole } from '@/components/react/HeroKineticRole'
 
 const blog = await getRecentPosts(3)
-const logs = (await getCollection('logs')).sort(
-  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-)
+const projects = (await getAllProjects()).slice(0, 2)
 const currentUrl = Astro.url;
 ---
 
@@ -34,20 +33,22 @@ const currentUrl = Astro.url;
         >
           {SITE.author}
         </h1>
-        <div class="mt-4 flex items-center gap-2" aria-label="location">
-          <span
-            class="bg-primary text-primary-foreground ring-primary/30 rounded-full px-3 py-1 text-sm font-medium ring-1 whitespace-nowrap"
-          >
-            I'm from
-          </span>
-          <span class="flex items-center gap-1">
-            <span class="text-foreground text-sm font-medium whitespace-nowrap"> {SITE.location}</span>
-            <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="h-6 w-6 transition-transform duration-500 hover:rotate-12 shrink-0" preserveAspectRatio="xMidYMid meet" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#138808" d="M0 27a4 4 0 0 0 4 4h28a4 4 0 0 0 4-4v-4H0v4z"></path><path fill="#EEE" d="M0 13h36v10H0z"></path><path fill="#F93" d="M36 13V9a4 4 0 0 0-4-4H4a4 4 0 0 0-4 4v4h36z"></path><circle fill="navy" cx="18" cy="18" r="4"></circle><circle fill="#EEE" cx="18" cy="18" r="3"></circle><path fill="#6666B3" d="M18 15l.146 2.264l1.001-2.035l-.73 2.147l1.704-1.498l-1.497 1.705l2.147-.731l-2.035 1.002L21 18l-2.264.146l2.035 1.001l-2.147-.73l1.497 1.704l-1.704-1.497l.73 2.147l-1.001-2.035L18 21l-.146-2.264l-1.002 2.035l.731-2.147l-1.705 1.497l1.498-1.704l-2.147.73l2.035-1.001L15 18l2.264-.146l-2.035-1.002l2.147.731l-1.498-1.705l1.705 1.498l-.731-2.147l1.002 2.035z"></path><circle fill="navy" cx="18" cy="18" r="1"></circle></g></svg>
-          </span>
+        <div class="mt-4 w-full">
+          <HeroKineticRole client:load />
         </div>
         <p class="text-md text-foreground mt-4 text-start font-sans whitespace-normal break-words" title="description" aria-label="description">
           {SITE.description}
         </p>
+        <div class="mt-5 flex items-center gap-3">
+          <Link
+            href="/resume?reference=resume"
+            target="_blank"
+            class={buttonVariants({ variant: 'default', size: 'sm' }) + ' rounded-full px-4 gap-2 text-xs font-semibold group'}
+          >
+            <Icon name="lucide:file-text" class="size-3.5 transition-transform group-hover:scale-110" />
+            Resume
+          </Link>
+        </div>
       </div>
     </div>
 
@@ -64,28 +65,30 @@ const currentUrl = Astro.url;
         </h2>
       </div>
       <p class="text-muted-foreground text-sm mb-6 mt-1 whitespace-normal break-words" aria-label="now description">
-        A running log of experiments, breakages, and small wins.
+        A running showcase of what I'm building, experimenting with, and actively maintaining.
       </p>
-      <div class="relative flex flex-col gap-y-8 w-full min-w-0 pl-4 sm:pl-8">
+
+      <div class="relative flex flex-col gap-y-4 sm:gap-y-4.5 w-full min-w-0 pl-4 sm:pl-8 my-3">
         <!-- Continuous Timeline Line -->
         <div class="absolute left-[21px] sm:left-[37px] top-6 bottom-6 w-[2px] bg-border/40 z-0"></div>
         
         {
-          logs.slice(0, 3).map((log, index, arr) => (
-            <div class="relative pl-10 sm:pl-16 z-10 group/timeline w-full min-w-0 mt-6">
+          projects.map((project) => (
+            <div class="relative pl-10 sm:pl-16 z-10 group/timeline w-full min-w-0">
               <!-- Timeline Dot -->
-              <div class="absolute left-0 top-[64px] sm:top-[70px] -translate-y-1/2 w-3 h-3 rounded-full bg-border ring-4 ring-background transition-colors duration-300 group-hover/timeline:bg-primary z-10"></div>
-              <LogCard log={log} client:load />
+              <div class="absolute left-0 top-[24px] -translate-y-1/2 w-3 h-3 rounded-full bg-border ring-4 ring-background transition-colors duration-300 group-hover/timeline:bg-primary z-10"></div>
+              <ProjectTimelineCard project={project} />
             </div>
           ))
         }
       </div>
-      <div class="flex justify-center mt-6" aria-label="see full log">
+
+      <div class="flex justify-center mt-6" aria-label="view full projects">
         <Link
-          href="/logs"
+          href="/projects"
           class={buttonVariants({ variant: 'ghost' }) + ' group'}
         >
-          See full log <span
+          View all projects <span
             class="ml-1.5 transition-transform group-hover:translate-x-1"
             >&rarr;</span
           >
