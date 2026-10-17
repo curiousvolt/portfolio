@@ -1,0 +1,100 @@
+---
+import { Icon } from 'astro-icon/components'
+import { cn } from '@/lib/utils'
+
+interface Props {
+  type?: 'note' | 'tip' | 'warning' | 'important' | 'decision' | 'quote'
+  title?: string
+  icon?: string
+  className?: string
+}
+
+const {
+  type = 'note',
+  title,
+  icon,
+  className = '',
+} = Astro.props
+
+const config = {
+  note: {
+    icon: 'lucide:info',
+    badge: 'Note',
+    border: 'border-blue-500/25 dark:border-blue-400/20',
+    bg: 'bg-blue-500/5 dark:bg-blue-400/5',
+    iconColor: 'text-blue-600 dark:text-blue-400',
+    titleColor: 'text-blue-900 dark:text-blue-200',
+  },
+  tip: {
+    icon: 'lucide:lightbulb',
+    badge: 'Tip',
+    border: 'border-emerald-500/25 dark:border-emerald-400/20',
+    bg: 'bg-emerald-500/5 dark:bg-emerald-400/5',
+    iconColor: 'text-emerald-600 dark:text-emerald-400',
+    titleColor: 'text-emerald-900 dark:text-emerald-200',
+  },
+  warning: {
+    icon: 'lucide:triangle-alert',
+    badge: 'Warning',
+    border: 'border-amber-500/30 dark:border-amber-400/20',
+    bg: 'bg-amber-500/5 dark:bg-amber-400/5',
+    iconColor: 'text-amber-600 dark:text-amber-400',
+    titleColor: 'text-amber-900 dark:text-amber-200',
+  },
+  important: {
+    icon: 'lucide:alert-circle',
+    badge: 'Important',
+    border: 'border-purple-500/25 dark:border-purple-400/20',
+    bg: 'bg-purple-500/5 dark:bg-purple-400/5',
+    iconColor: 'text-purple-600 dark:text-purple-400',
+    titleColor: 'text-purple-900 dark:text-purple-200',
+  },
+  decision: {
+    icon: 'lucide:compass',
+    badge: 'Product Decision',
+    border: 'border-primary/30',
+    bg: 'bg-primary/5',
+    iconColor: 'text-primary',
+    titleColor: 'text-foreground',
+  },
+  quote: {
+    icon: 'lucide:quote',
+    badge: 'Takeaway',
+    border: 'border-border/70',
+    bg: 'bg-secondary/40 dark:bg-secondary/25',
+    iconColor: 'text-primary',
+    titleColor: 'text-foreground',
+  },
+}
+
+const current = config[type] || config.note
+const displayIcon = icon || current.icon
+const displayTitle = title || current.badge
+---
+
+<div
+  class={cn(
+    'my-6 2xl:my-7 rounded-2xl border p-4.5 sm:p-5 2xl:p-6 transition-all shadow-2xs',
+    current.border,
+    current.bg,
+    className
+  )}
+  role="region"
+  aria-label={displayTitle}
+>
+  <div class="flex flex-col gap-1.5 2xl:gap-2">
+    <div class="flex items-center gap-2.5">
+      <span class={cn('shrink-0 flex items-center justify-center', current.iconColor)}>
+        <Icon name={displayIcon} class="size-4.5 2xl:size-5" />
+      </span>
+      {displayTitle && (
+        <span class={cn('text-xs 2xl:text-[13px] font-bold uppercase tracking-wider !m-0 !leading-none', current.titleColor)}>
+          {displayTitle}
+        </span>
+      )}
+    </div>
+    <div class="text-sm sm:text-base 2xl:text-[17px] leading-relaxed 2xl:leading-[1.75] text-foreground/85 pl-7 2xl:pl-8 [&>p]:my-1.5 [&>p:first-child]:!mt-0 [&>p:last-child]:!mb-0 [&>ul]:my-2 [&>ol]:my-2">
+      <slot />
+    </div>
+  </div>
+</div>

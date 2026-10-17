@@ -11,10 +11,10 @@ const { headings } = Astro.props
 
 function getHeadingMargin(depth: number): string {
   const margins: Record<number, string> = {
-    3: 'ml-4',
-    4: 'ml-8',
-    5: 'ml-12',
-    6: 'ml-16',
+    3: 'ml-3.5 2xl:ml-4',
+    4: 'ml-7 2xl:ml-8',
+    5: 'ml-10 2xl:ml-12',
+    6: 'ml-14 2xl:ml-16',
   }
   return margins[depth] || ''
 }
@@ -29,51 +29,59 @@ function cleanupHeading(text: string): string {
 }
 ---
 
-<details
-  open
-  class="hidden xl:block group rounded-xl border p-4 xl:max-w-fit xl:rounded-none xl:border-none xl:p-0"
+<nav
+  aria-label="Table of contents"
+  class="toc-container hidden xl:flex flex-col w-full max-h-[calc(100vh-8rem)] rounded-xl border bg-card p-4 2xl:p-5 shadow-md transition-all duration-300 select-none"
 >
-  <summary
-    class="flex cursor-pointer items-center justify-between text-xl font-medium group-open:pb-4"
-  >
-    <div>
-      <hr class="mb-8 hidden md:block" />
-      <h2
-        id="skills-title"
-        class="font-custom flex items-center gap-x-2 text-2xl font-bold text-neutral-900 dark:text-white"
+  <div class="shrink-0 flex items-center justify-between pb-3 mb-2 2xl:pb-3.5 2xl:mb-3 border-b border-border/50">
+    <h2 class="text-base 2xl:text-[17px] font-semibold flex items-center gap-2 whitespace-nowrap">
+      <Icon name="lucide:list" class="size-4 2xl:size-[18px] text-primary shrink-0" />
+      <span>Table of Contents</span>
+    </h2>
+    <button 
+      type="button"
+      class="toc-jump-trigger relative flex items-center justify-center size-6 2xl:size-7 rounded-full bg-secondary/60 hover:bg-primary/15 border border-border/60 hover:border-primary/40 text-primary shrink-0 transition-colors cursor-pointer group"
+      title="Jump to first section"
+      aria-label="Jump to first section"
+    >
+      <svg 
+        class="toc-arrow-svg size-3.5 2xl:size-4 text-primary shrink-0 pointer-events-none" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        stroke-width="2.2" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
       >
-        Table of Contents <Icon
-          name="lucide:chevron-down"
-          class="size-5 shrink-0 transition-transform group-open:rotate-180"
-        />
-      </h2>
-      <p class="text-sm text-neutral-500 dark:text-neutral-400">
-        This is a list of all the sections in this post. Click on any of them to
-        jump to that section.
-      </p>
-    </div>
-  </summary>
+        <!-- Straight line descending from top to bottom -->
+        <path class="toc-arrow-stem" d="M12 4.5V17.5" />
+        <!-- Left barb diverging outwards from bottom tip -->
+        <path class="toc-arrow-wing-left" d="M12 17.5L7 12.5" />
+        <!-- Right barb diverging outwards from bottom tip -->
+        <path class="toc-arrow-wing-right" d="M12 17.5L17 12.5" />
+      </svg>
+    </button>
+  </div>
 
   <div
-    class="flex max-h-64 flex-col overflow-y-auto xl:max-h-[calc(100vh-8rem)] pr-2"
+    class="flex-1 min-h-0 overflow-y-auto custom-scrollbar -mr-1.5 pr-1.5 overscroll-contain"
   >
     <ul
-      class="flex list-none flex-col gap-y-2 px-4 xl:mr-8"
-      id="table-of-contents"
+      class="table-of-contents-list flex list-none flex-col gap-y-1 2xl:gap-y-1.5"
     >
       {
         headings.map((heading) => (
           <li
             class={cn(
-              'text-foreground/60 text-sm xl:p-0',
+              'text-foreground/70 text-xs xl:p-0 transition-colors',
               getHeadingMargin(heading.depth)
             )}
           >
             <a
               href={`#${heading.slug}`}
-              class="marker:text-foreground/30 block list-disc px-3 py-1.5 text-foreground/60 transition-all duration-200 hover:text-foreground hover:translate-x-0.5 xl:list-none"
+              class="block px-2.5 2xl:px-3 py-1.5 2xl:py-2 text-[12.5px] 2xl:text-[14px] leading-snug 2xl:leading-normal rounded-lg text-foreground/70 transition-all duration-200 hover:text-foreground hover:bg-secondary/50 break-words"
               aria-label={`Scroll to ${heading.text}`}
-              title={`Scroll to ${heading.text}`}
+              title={cleanupHeading(heading.text)}
             >
               {cleanupHeading(heading.text)}
             </a>
@@ -82,12 +90,41 @@ function cleanupHeading(text: string): string {
       }
     </ul>
   </div>
-</details>
+</nav>
 
 <script>
   function setupToc() {
     const header = document.querySelector('header')
     const headerHeight = header ? header.offsetHeight : 0
+
+    const lists = document.querySelectorAll<HTMLElement>('.table-of-contents-list')
+    if (!lists.length) return
+
+    function updateVisibleHeadings() {
+      lists.forEach((list) => {
+        const items = list.querySelectorAll<HTMLElement>('li')
+        items.forEach((li) => {
+          const a = li.querySelector('a')
+          if (!a) return
+          const href = a.getAttribute('href')
+          if (!href || !href.startsWith('#')) return
+          const target = document.getElementById(href.slice(1))
+          if (!target) return
+
+          // Check if the heading is inside a hidden section
+          const isHidden = target.closest('.hidden, [style*="display: none"]') !== null
+          li.style.display = isHidden ? 'none' : ''
+        })
+      })
+    }
+
+    updateVisibleHeadings()
+
+    // Observe tab changes
+    const observerTab = new MutationObserver(() => {
+      updateVisibleHeadings()
+    })
+    observerTab.observe(document.documentElement, { attributes: true, attributeFilter: ['data-project-tab'] })
 
     const headings = document.querySelectorAll('.prose h2, .prose h3, .prose h4')
     if (!headings.length) return
@@ -97,16 +134,16 @@ function cleanupHeading(text: string): string {
         entries.forEach((entry) => {
           const id = entry.target.getAttribute('id')
           if (!id) return
-          const link = document.querySelector(
-            `#table-of-contents li a[href="#${id}"]`
+          const links = document.querySelectorAll<HTMLElement>(
+            `.table-of-contents-list li a[href="#${id}"]`
           )
-          if (!link) return
+          if (!links.length) return
 
           if (entry.isIntersecting) {
             document
-              .querySelectorAll('#table-of-contents li a')
-              .forEach((l) => l.classList.remove('text-foreground', 'font-medium'))
-            link.classList.add('text-foreground', 'font-medium')
+              .querySelectorAll('.table-of-contents-list li a')
+              .forEach((l) => l.classList.remove('text-foreground', 'font-semibold', 'bg-secondary/60'))
+            links.forEach((l) => l.classList.add('text-foreground', 'font-semibold', 'bg-secondary/60'))
           }
         })
       },
@@ -116,8 +153,152 @@ function cleanupHeading(text: string): string {
     )
 
     headings.forEach((heading) => observer.observe(heading))
+
+    // Setup jump button to jump smoothly to first heading in active section
+    const jumpButtons = document.querySelectorAll<HTMLElement>('.toc-jump-trigger')
+    jumpButtons.forEach((btn) => {
+      btn.onclick = (e) => {
+        e.preventDefault()
+        const tocContainer = btn.closest('.toc-container')
+        const firstLink = tocContainer?.querySelector<HTMLAnchorElement>(
+          '.table-of-contents-list li:not([style*="display: none"]) a[href^="#"]'
+        )
+        let targetEl: HTMLElement | null = null
+
+        if (firstLink) {
+          const targetId = firstLink.getAttribute('href')?.slice(1)
+          if (targetId) targetEl = document.getElementById(targetId)
+        }
+
+        if (!targetEl) {
+          const allHeadings = Array.from(document.querySelectorAll<HTMLElement>('.prose h2, .prose h3'))
+          targetEl = allHeadings.find((h) => {
+            const isHidden = h.closest('.hidden, [style*="display: none"]') !== null
+            return !isHidden
+          }) || null
+        }
+
+        if (targetEl) {
+          const currentHeader = document.querySelector('header')
+          const headerOffset = currentHeader ? currentHeader.offsetHeight + 24 : 80
+          const elementPosition = targetEl.getBoundingClientRect().top
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          })
+        }
+      }
+    })
   }
 
+  setupToc()
   document.addEventListener('astro:page-load', setupToc)
   document.addEventListener('astro:after-swap', setupToc)
 </script>
+
+<style>
+  .toc-arrow-svg {
+    overflow: visible;
+    animation: toc-arrow-jump 2.8s ease-in-out infinite;
+  }
+
+  .toc-arrow-stem {
+    stroke-dasharray: 14;
+    stroke-dashoffset: 14;
+    animation: toc-draw-stem 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  .toc-arrow-wing-left,
+  .toc-arrow-wing-right {
+    stroke-dasharray: 8;
+    stroke-dashoffset: 8;
+    animation: toc-draw-wings 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  /* Faster animation on hover */
+  .toc-jump-trigger:hover .toc-arrow-svg,
+  .toc-jump-trigger:hover .toc-arrow-stem,
+  .toc-jump-trigger:hover .toc-arrow-wing-left,
+  .toc-jump-trigger:hover .toc-arrow-wing-right {
+    animation-duration: 1.8s;
+  }
+
+  /* Stem descends from top to bottom */
+  @keyframes toc-draw-stem {
+    0% {
+      stroke-dashoffset: 14;
+      opacity: 0;
+    }
+    4% {
+      opacity: 1;
+    }
+    28% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    82% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    94%, 100% {
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+
+  /* Wings diverge outward from bottom tip */
+  @keyframes toc-draw-wings {
+    0%, 26% {
+      stroke-dashoffset: 8;
+      opacity: 0;
+    }
+    28% {
+      opacity: 1;
+    }
+    46% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    82% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    94%, 100% {
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+
+  /* Micro jump impulse when fully formed */
+  @keyframes toc-arrow-jump {
+    0%, 46% {
+      transform: translateY(0);
+    }
+    52% {
+      transform: translateY(2.5px);
+    }
+    60% {
+      transform: translateY(-0.8px);
+    }
+    66% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .toc-arrow-svg,
+    .toc-arrow-stem,
+    .toc-arrow-wing-left,
+    .toc-arrow-wing-right {
+      animation: none !important;
+      stroke-dashoffset: 0 !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>

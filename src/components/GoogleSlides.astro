@@ -1,0 +1,52 @@
+---
+import { Icon } from 'astro-icon/components'
+
+interface Props {
+  src: string
+  title?: string
+  aspectRatio?: '16/9' | '4/3' | '16/10'
+  className?: string
+}
+
+const {
+  src,
+  title = 'Presentation Deck',
+  aspectRatio = '16/9',
+  className = '',
+} = Astro.props
+
+// Normalize Google Slides edit/view links to embed if user pasted standard link
+let embedUrl = src
+if (src.includes('docs.google.com/presentation') && !src.includes('/embed')) {
+  embedUrl = src.replace(/\/pub.*$/, '/embed').replace(/\/edit.*$/, '/embed')
+}
+---
+
+<div class={`my-6 rounded-2xl overflow-hidden border border-border/70 bg-card/60 shadow-md max-w-full ${className}`}>
+  <div class="flex items-center justify-between gap-2 px-4 py-3 bg-secondary/50 border-b border-border/60 text-xs">
+    <div class="flex items-center gap-2.5 text-foreground/90 font-medium truncate min-w-0">
+      <span class="p-1 rounded-md bg-amber-500/10 text-amber-500">
+        <Icon name="lucide:presentation" class="size-4" />
+      </span>
+      <span class="truncate font-semibold text-xs sm:text-sm">{title}</span>
+    </div>
+    <a
+      href={src}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-1 text-xs text-primary hover:underline font-semibold shrink-0"
+    >
+      <span>Open Fullscreen</span>
+      <Icon name="lucide:external-link" class="size-3" />
+    </a>
+  </div>
+  <div class="w-full aspect-video bg-black/5 dark:bg-black/30" style={`aspect-ratio: ${aspectRatio};`}>
+    <iframe
+      src={embedUrl}
+      title={title}
+      class="w-full h-full border-none"
+      allowfullscreen
+      loading="lazy"
+    ></iframe>
+  </div>
+</div>

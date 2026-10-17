@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { GithubRepoCard } from './github-repo-card'
 import { SideProjectCard } from './side-project-card'
 import { MediaCard } from './media-card'
@@ -7,6 +7,7 @@ import type { GitHubRepo } from '@/consts'
 import type { CollectionEntry } from 'astro:content'
 import { Folder, Github, Mail, Star, GitFork, Linkedin } from 'lucide-react'
 import { AnimatedResumeIcon } from './AnimatedResumeIcon'
+import { getActiveRole, type UserRole } from '@/lib/role'
 
 export const AboutContent = ({ 
   initialGraphSvg, 
@@ -24,6 +25,27 @@ export const AboutContent = ({
   contributionYear?: number
 }) => {
   const [activeTab, setActiveTab] = useState<'side' | 'github'>('side')
+  const [role, setRole] = useState<UserRole>(() => {
+    if (typeof window !== 'undefined') {
+      return getActiveRole()
+    }
+    return 'pe'
+  })
+
+  useEffect(() => {
+    setRole(getActiveRole())
+
+    const handleRoleChanged = (e: Event) => {
+      const customEvent = e as CustomEvent<{ role: UserRole }>
+      if (customEvent.detail?.role) {
+        setRole(customEvent.detail.role)
+      }
+    }
+
+    window.addEventListener('cv_role_changed', handleRoleChanged)
+    return () => window.removeEventListener('cv_role_changed', handleRoleChanged)
+  }, [])
+
   const repos = githubData.repos
   const totalStars = githubData.stars
   const totalForks = githubData.forks
@@ -45,8 +67,19 @@ export const AboutContent = ({
         <div className="flex items-center gap-2">
           <a 
             href="#" 
-            onClick={(e) => { e.currentTarget.href = `mailto:${SITE.email}` }}
-            onMouseEnter={(e) => { e.currentTarget.href = `mailto:${SITE.email}` }}
+            data-contact="email"
+            onClick={(e) => { 
+              const decoded = atob("bWFpbHRvOml0c2N1cmlvdXN2b2x0QGdtYWlsLmNvbQ==");
+              e.currentTarget.href = decoded;
+            }}
+            onMouseEnter={(e) => { 
+              const decoded = atob("bWFpbHRvOml0c2N1cmlvdXN2b2x0QGdtYWlsLmNvbQ==");
+              e.currentTarget.href = decoded;
+            }}
+            onFocus={(e) => {
+              const decoded = atob("bWFpbHRvOml0c2N1cmlvdXN2b2x0QGdtYWlsLmNvbQ==");
+              e.currentTarget.href = decoded;
+            }}
             className="group w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-secondary/50 flex items-center justify-center hover:bg-secondary border border-border/30 transition-colors duration-300"
             aria-label="Email"
             title="Email"
@@ -96,7 +129,9 @@ export const AboutContent = ({
 
       <div className="w-full flex flex-wrap items-center gap-3 mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ animationDelay: '200ms', animationFillMode: 'both' }}>
         <a 
-          href="/resume?reference=resume" 
+          href={role === 'pm' ? '/resumepm' : '/resume'}
+          data-resume-link="true"
+          title={role === 'pm' ? 'Download Product Manager Resume' : 'Download Resume'}
           target="_blank"
           rel="noopener noreferrer"
           className="group flex items-center gap-2 px-6 py-2.5 border border-border/50 bg-secondary/30 hover:bg-secondary text-foreground text-sm font-bold rounded-full transition-all duration-300 shadow-2xs"
@@ -215,7 +250,7 @@ export const AboutContent = ({
 
       {/* BOTTOM MEDIA ROW */}
       <div className="w-full mt-24 border-t border-border/40 pt-16 animate-in fade-in duration-1000" style={{ animationDelay: '400ms', animationFillMode: 'both' }}>
-        <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-8 text-center sm:text-left">Last watched / read / listened to / played</h3>
+        <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-8 text-center sm:text-left">Recommendations</h3>
         
         <div className="flex items-center gap-4 sm:gap-6 overflow-x-auto pb-6 scrollbar-hide snap-x">
           {media.map((item, i) => (

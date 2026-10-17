@@ -61,7 +61,53 @@ import Favicons from './Favicons.astro'
     href={new URL('rss.xml', Astro.site)}
   />
 
+  <!-- KaTeX CSS for LaTeX Mathematics -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+    crossorigin="anonymous"
+  />
+
   <Favicons />
+
+  <script is:inline>
+    // Client-side role persistence: checks ?role=pm or ?role=pe in sessionStorage
+    (function () {
+      try {
+        if (localStorage.getItem('cv_active_role')) {
+          localStorage.removeItem('cv_active_role');
+        }
+        var params = new URLSearchParams(window.location.search);
+        var r = params.get('role');
+        if (r) {
+          r = r.toLowerCase();
+          if (r === 'pm') {
+            sessionStorage.setItem('cv_active_role', 'pm');
+          } else if (r === 'pe') {
+            sessionStorage.removeItem('cv_active_role');
+          }
+        }
+
+        var isPM = (r === 'pm') || (sessionStorage.getItem('cv_active_role') === 'pm');
+        if (isPM) {
+          var updateResumeLinks = function() {
+            var links = document.querySelectorAll('a[data-resume-link], a[href*="/resume"]');
+            links.forEach(function(el) {
+              var href = el.getAttribute('href');
+              if (href && !href.includes('resume-pm') && !href.startsWith('#')) {
+                el.setAttribute('href', href.replace('/resume', '/resume-pm'));
+              }
+            });
+          };
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', updateResumeLinks);
+          } else {
+            updateResumeLinks();
+          }
+        }
+      } catch (e) {}
+    })();
+  </script>
 
   <slot />
 </head>

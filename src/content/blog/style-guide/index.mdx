@@ -1,0 +1,208 @@
+---
+title: "Markdown & MDX Style Guide: Complete Formatting & Embed Reference"
+description: "A comprehensive showcase and guide to clean formatting in CuriousVolt: rounded callouts, Google Slides, PDF viewers, code blocks, tables, and lists."
+date: 2026-10-17
+tags:
+  - "guide"
+  - "design"
+  - "markdown"
+authors:
+  - "Aman"
+slug: "style-guide"
+image: ./thumbnail.png
+---
+
+import Callout from '@/components/Callout.astro'
+import GoogleSlides from '@/components/GoogleSlides.astro'
+import DocumentEmbed from '@/components/project/DocumentEmbed.astro'
+
+Welcome to the **CuriousVolt Markdown & MDX Style Guide**. This live reference demonstrates all the typography, callout components, media embeds, and code formatting features available across both the blog and project sections.
+
+---
+
+## 1. Clean Rounded Callouts (No Boring Left Line)
+
+Callouts now feature **smooth rounded corners (`rounded-2xl`)**, subtle elevated card backgrounds, and category-specific icons. The old left border line has been replaced with modern, balanced all-around card styling.
+
+<Callout type="note" title="Information Note">
+Use this for contextual explanations, background details, or architectural notes that support the main text without interrupting the reading flow.
+</Callout>
+
+<Callout type="tip" title="Pro Tip / Best Practice">
+Performance optimizations and tactical advice look best in tip callouts. For example: leverage client-side PDF rendering to reduce server compute by 90%.
+</Callout>
+
+<Callout type="decision" title="Product Decision">
+When writing product case studies, use the decision callout to highlight key strategic trade-offs, scope decisions, and core product bets.
+</Callout>
+
+<Callout type="warning" title="Warning / Edge Case">
+Alert readers to potential pitfalls, breaking API changes, or critical security requirements.
+</Callout>
+
+<Callout type="important" title="Important Requirement">
+Use for essential prerequisites, non-negotiable compliance rules, or key metrics milestones.
+</Callout>
+
+### How to use Callout in your MDX:
+
+```mdx
+import Callout from '@/components/Callout.astro'
+
+<Callout type="tip" title="Pro Tip">
+  Your custom advice or explanation goes here.
+</Callout>
+```
+
+---
+
+## 2. Standard Blockquotes
+
+Standard Markdown blockquotes (`> text`) also render with the new borderless-left, rounded card aesthetic:
+
+> "Simplicity is about subtracting the obvious and adding the meaningful. A great user interface gets out of the way and lets the product speak for itself."
+>
+> — *John Maeda, The Laws of Simplicity*
+
+---
+
+## 3. Lists & Hierarchies
+
+### Bulleted Lists (Unordered)
+
+- **Primary Product Pillars**:
+  - Frictionless guest-first onboarding
+  - Real-time milestone progress tracking
+  - Instant automated tax compliance exports
+- **Engineering Highlights**:
+  - Sub-second edge response times
+  - Normalized document schemas for audit integrity
+  - Full TypeScript type safety across frontend and API layers
+
+### Numbered Lists (Step-by-Step Flow)
+
+1. **User Discovery**: Reader discovers open-source project via GitHub or technical blog post.
+2. **Interactive Preview**: User explores the live interactive demo and inspects product decisions.
+3. **Execution**: Checkout or authentication completes in under 30 seconds with zero friction.
+4. **Instant Confirmation**: System delivers an automated, audit-ready PDF receipt to the client.
+
+---
+
+## 4. Code Blocks & Syntax Highlighting
+
+Powered by **Expressive Code**, code blocks feature line numbers, copy buttons, file titles, and dark/light adaptive syntax highlighting:
+
+```typescript title="src/lib/metrics.ts" {4,9-11}
+export interface FunnelMetric {
+  step: string;
+  conversionRate: number;
+  dropoffPercentage: number;
+}
+
+export function computeFunnelHealth(events: number[]): FunnelMetric[] {
+  // Highlighted lines emphasize critical algorithms
+  return events.map((count, idx) => ({
+    step: `Phase ${idx + 1}`,
+    conversionRate: (count / (events[0] || 1)) * 100,
+    dropoffPercentage: 100 - (count / (events[0] || 1)) * 100,
+  }));
+}
+```
+
+```bash title="Terminal"
+# Clone and run the portfolio locally
+git clone https://github.com/curiousvolt/portfolio.git
+cd portfolio
+npm install
+npm run dev
+```
+
+Inline code is styled cleanly with rounded badges: `const role = 'pm'`, `npm run build`, and `GET /api/v1/projects`.
+
+---
+
+## 5. Google Slides Embed
+
+Embed any interactive Google Slides deck with a **responsive 16:9 aspect ratio**, slide navigation controls, and fullscreen view:
+
+<GoogleSlides 
+  src="https://docs.google.com/presentation/d/e/2PACX-1vT5N4h8jK9Y3mZ7w0qR1sP6uV9X8yT7A6B5C4D3E2F1G0H/embed?start=false&loop=false&delayms=3000" 
+  title="Product Strategy & Architecture Overview" 
+/>
+
+### How to use Google Slides in your MDX:
+
+```mdx
+import GoogleSlides from '@/components/GoogleSlides.astro'
+
+<GoogleSlides 
+  src="https://docs.google.com/presentation/d/YOUR_PRESENTATION_ID/embed" 
+  title="Your Presentation Title" 
+/>
+```
+
+---
+
+## 6. PDF Document Embed
+
+Embed product requirement documents (PRDs), architectural whitepapers, or logistics reports with built-in download and fullscreen controls:
+
+<DocumentEmbed 
+  src="/projects/document_pdf.pdf" 
+  title="Product Requirements Document (PRD)" 
+  height="540px" 
+/>
+
+### How to use DocumentEmbed in your MDX:
+
+```mdx
+import DocumentEmbed from '@/components/project/DocumentEmbed.astro'
+
+<DocumentEmbed 
+  src="/path-to-document.pdf" 
+  title="Architecture Specification" 
+  height="560px" 
+/>
+```
+
+---
+
+## 7. Data Tables
+
+Tables are rendered with rounded corners, subtle headers, clean borders, and full mobile horizontal scrolling:
+
+| Phase | Milestone Objective | Target Deliverable | Status |
+| :--- | :--- | :--- | :--- |
+| **Q1** | User Research & Discovery | 15 User interviews & Persona maps | Complete |
+| **Q2** | MVP Architecture | Node.js REST API + React UI | Complete |
+| **Q3** | Production Hardening | Automated PayPal capture & PDF generation | Shipped |
+| **Q4** | Scale & Analytics | Admin telemetry dashboard & CSV export | Active |
+
+---
+
+## 8. Mathematical Formulas (LaTeX / KaTeX)
+
+Support for both inline equations like $E = mc^2$ and complex mathematical formulas:
+
+$$\sigma(z) = \frac{1}{1 + e^{-z}}$$
+
+$$\text{Precision} = \frac{\text{True Positives}}{\text{True Positives} + \text{False Positives}}$$
+
+---
+
+## 9. Collapsible Details & FAQs
+
+<details>
+  <summary>How do I switch perspectives on project pages?</summary>
+  Project pages support dual perspectives: **Product** (strategy, metrics, personas, decks) and **Technical** (architecture, schemas, API endpoints). Visitors can toggle tabs directly on the page, or view the Product perspective automatically via `?role=pm`.
+</details>
+
+---
+
+## Summary Checklist for MDX Authors
+
+- **Callouts**: Use `<Callout type="tip | note | decision | warning | important">` instead of boring lines.
+- **Presentations**: Use `<GoogleSlides src="..." title="..." />` for 16:9 interactive slides.
+- **PDFs**: Use `<DocumentEmbed src="..." title="..." />` for whitepapers and documentation.
+- **Code**: Use standard triple backticks with language and optional `title="..."`.
+- **Tables**: Use standard markdown pipe tables; they are automatically styled and responsive.

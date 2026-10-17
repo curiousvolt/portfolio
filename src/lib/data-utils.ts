@@ -105,7 +105,9 @@ export async function getPostsByTag(
 
 export async function getAllProjects(): Promise<CollectionEntry<'projects'>[]> {
   const projects = await getCollection('projects')
+  // Exclude standalone companion mdx files like product.mdx from root project lists
   return projects
+    .filter((p) => !p.id.endsWith('/product') && p.id !== 'product')
     .sort((a, b) => (b.data.startDate?.valueOf() ?? 0) - (a.data.startDate?.valueOf() ?? 0))
 } 
 

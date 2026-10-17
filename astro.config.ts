@@ -7,7 +7,6 @@ import icon from 'astro-icon'
 import expressiveCode from 'astro-expressive-code'
 import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import rehypeExternalLinks from 'rehype-external-links'
-import rehypePrettyCode from 'rehype-pretty-code'
 import remarkEmoji from 'remark-emoji'
 import remarkMath from 'remark-math'
 import remarkSectionize from 'remark-sectionize'
@@ -15,6 +14,8 @@ import rehypeDocument from 'rehype-document'
 
 import { pluginCollapsibleSections } from '@expressive-code/plugin-collapsible-sections'
 import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
+import { pluginFrames } from 'astro-expressive-code'
+import rehypeKatex from 'rehype-katex'
 
 import tailwindcss from "@tailwindcss/vite";
 import vercel from '@astrojs/vercel';
@@ -50,11 +51,13 @@ export default defineConfig({
 
   redirects: {
     '/resume': '/resume.pdf',
+    '/resumepm': '/resumepm.pdf',
+    '/resume-pm': '/resumepm.pdf',
   },
 
   integrations: [expressiveCode({
     themes: ['catppuccin-latte', 'ayu-dark'],
-    plugins: [pluginCollapsibleSections(), pluginLineNumbers()],
+    plugins: [pluginFrames(), pluginCollapsibleSections(), pluginLineNumbers()],
     useDarkModeMediaQuery: true,
     defaultProps: {
       wrap: true,
@@ -111,15 +114,7 @@ export default defineConfig({
       ],
       rehypeDemoteH1AndStripTitle,
       rehypeHeadingIds,
-      [
-        rehypePrettyCode,
-        {
-          theme: {
-            light: 'catppuccin-latte',
-            dark: 'ayu-dark',
-          },
-        },
-      ],
+      rehypeKatex,
     ],
     remarkPlugins: [remarkMath, remarkEmoji, remarkSectionize],
   },

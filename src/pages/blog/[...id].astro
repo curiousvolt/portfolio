@@ -54,9 +54,9 @@ const canonicalUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
     set:html={JSON.stringify(structuredData)}
   />
   <section
-    class="mx-auto w-full max-w-3xl xl:max-w-[1440px] flex flex-col gap-y-6"
+    class="mx-auto w-full max-w-3xl xl:max-w-[1440px] 2xl:max-w-[1600px] flex flex-col gap-y-6"
   >
-    <div class="flex flex-col gap-y-8 xl:grid xl:grid-cols-[240px_minmax(0,740px)_340px] xl:gap-x-8 xl:gap-y-6 xl:justify-center animate-fade-in-up">
+    <div class="flex flex-col gap-y-8 xl:grid xl:grid-cols-[280px_minmax(0,760px)_280px] 2xl:grid-cols-[320px_minmax(0,860px)_320px] xl:gap-x-8 2xl:gap-x-10 xl:gap-y-6 xl:justify-center animate-fade-in-up">
       <div class="hidden xl:block"></div>
       <div class="flex flex-col gap-y-6">
         <div>
@@ -67,15 +67,15 @@ const canonicalUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
             ]}
           />
         </div>
-        <section class="flex flex-col gap-y-6 text-start">
+        <section class="flex flex-col gap-y-4 sm:gap-y-6 text-start">
           <div class="flex flex-col">
             <h1
-              class="mb-2 text-3xl leading-tight font-medium text-pretty sm:text-5xl"
+              class="mb-2 text-3xl leading-tight font-medium text-pretty sm:text-5xl 2xl:text-[54px]"
             >
               {post.data.title}
             </h1>
 
-            <div class="my-6 rounded-xl overflow-hidden w-full aspect-video border border-border/50 bg-muted">
+            <div class="mt-4 mb-3 sm:my-6 rounded-xl overflow-hidden w-full aspect-video border border-border/50 bg-muted">
               {post.data.image ? (
                 <Image src={post.data.image} alt={post.data.title} class="w-full h-full object-cover" format="webp" fetchpriority="high" loading="eager" decoding="async" />
               ) : (
@@ -83,7 +83,7 @@ const canonicalUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
               )}
             </div>
 
-            <div class="flex flex-wrap justify-start gap-2 mt-4">
+            <div class="flex flex-wrap justify-start gap-2 mt-2 sm:mt-3">
               {
                 post.data.tags && post.data.tags.length > 0 ? (
                   post.data.tags.map((tag) => (
@@ -106,7 +106,7 @@ const canonicalUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
         </section>
 
         <div
-          class="text-muted-foreground flex flex-wrap items-center justify-center gap-2 text-sm"
+          class="text-muted-foreground flex flex-wrap items-center justify-center gap-2 text-sm mt-2 sm:mt-0"
         >
           <div class="flex items-center gap-2">
             <span>{formatDate(post.data.date)}</span>
@@ -120,15 +120,15 @@ const canonicalUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
       <div class="hidden xl:block"></div>
     </div>
 
-    <div class="flex flex-col gap-y-8 xl:grid xl:grid-cols-[240px_minmax(0,740px)_340px] xl:gap-x-8 xl:gap-y-6 xl:justify-center">
-      <div class="order-1 xl:order-none">
-        <div class="xl:sticky xl:top-24">
+    <div class="flex flex-col gap-y-3 sm:gap-y-6 xl:grid xl:grid-cols-[280px_minmax(0,760px)_280px] 2xl:grid-cols-[320px_minmax(0,860px)_320px] xl:gap-x-8 2xl:gap-x-10 xl:gap-y-6 xl:justify-center">
+      <div class="hidden xl:block xl:order-none">
+        <div class="xl:sticky xl:top-24 max-h-[calc(100vh-7.5rem)] flex flex-col">
           {headings.length > 0 && <TableOfContents headings={headings} />}
         </div>
       </div>
 
-      <div class="order-2 xl:order-none flex flex-col gap-y-12 min-w-0 max-w-none">
-        <article class="prose dark:prose-invert min-w-0 max-w-none" aria-label="Blog post">
+      <div class="order-2 xl:order-none flex flex-col gap-y-8 sm:gap-y-12 min-w-0 max-w-none">
+        <article class="prose dark:prose-invert min-w-0 max-w-none [&>*:first-child]:mt-1 sm:[&>*:first-child]:mt-2" aria-label="Blog post">
           <Content />
         </article>
         
@@ -138,23 +138,15 @@ const canonicalUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
       </div>
 
       <div class="order-3 xl:order-none">
-        <div class="xl:sticky xl:top-24">
-          <aside
-            class="group rounded-xl border p-4 xl:rounded-none xl:border-none xl:p-0"
-          >
-        <hr class="mb-8 hidden md:block" />
-        <div class="mb-2">
-          <h2
-            class="font-custom text-2xl font-bold text-neutral-900 dark:text-white"
-          >
-            Share this post
-          </h2>
-          <p class="text-sm text-neutral-500 dark:text-neutral-400">
-            If you found this post helpful, consider sharing it with your friends
-            or on social media. Your support helps me create more content like
-            this.
-          </p>
-        </div>
+        <div class="xl:sticky xl:top-24 max-h-[calc(100vh-7.5rem)] flex flex-col">
+          <aside class="flex flex-col">
+            <div class="flex flex-col gap-4 rounded-xl border bg-card p-4 2xl:p-5 shadow-md transition-all duration-300">
+              <div class="shrink-0 flex items-center pb-3 border-b border-border/50 select-none">
+                <h2 class="text-base 2xl:text-[17px] font-semibold flex items-center gap-2 whitespace-nowrap">
+                  <Icon name="lucide:share-2" class="size-4 2xl:size-[18px] text-primary shrink-0" />
+                  <span>Share Post</span>
+                </h2>
+              </div>
 
         <div class="flex flex-wrap gap-2">
           <Link
@@ -235,8 +227,8 @@ const canonicalUrl = new URL(`/blog/${post.id}/`, Astro.site).toString();
             </Button>
           </Link>
         </div>
-
-      </aside>
+      </div>
+    </aside>
         </div>
       </div>
     </div>

@@ -5,9 +5,11 @@ import type { MarkdownHeading } from 'astro'
 
 export const MobileTOC = ({
   headings,
+  productHeadings,
   title,
 }: {
   headings: MarkdownHeading[]
+  productHeadings?: MarkdownHeading[]
   title?: string
 }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -16,6 +18,35 @@ export const MobileTOC = ({
   const [isAtEnd, setIsAtEnd] = useState(false)
   const [isIdle, setIsIdle] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [currentTab, setCurrentTab] = useState<'product' | 'technical'>(() => {
+    if (typeof window !== 'undefined') {
+      const docTab = document.documentElement.getAttribute('data-project-tab') as 'product' | 'technical' | null
+      if (docTab) return docTab
+      const params = new URLSearchParams(window.location.search)
+      const role = params.get('role')?.toLowerCase() || sessionStorage.getItem('cv_active_role')
+      if (role === 'pm') return 'product'
+    }
+    return 'technical'
+  })
+
+  useEffect(() => {
+    const docTab = document.documentElement.getAttribute('data-project-tab') as 'product' | 'technical' | null
+    if (docTab && docTab !== currentTab) setCurrentTab(docTab)
+
+    const handleTabSwitched = (e: Event) => {
+      const customEvent = e as CustomEvent<{ tab: 'product' | 'technical' }>
+      if (customEvent.detail?.tab) {
+        setCurrentTab(customEvent.detail.tab)
+      }
+    }
+
+    window.addEventListener('cv_tab_switched', handleTabSwitched)
+    return () => window.removeEventListener('cv_tab_switched', handleTabSwitched)
+  }, [currentTab])
+
+  const activeHeadings = (currentTab === 'product' && productHeadings && productHeadings.length > 0)
+    ? productHeadings
+    : headings
 
   const idleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isInteractingRef = useRef(false)
@@ -91,28 +122,40 @@ export const MobileTOC = ({
   }, [resetIdleTimer])
 
   useEffect(() => {
-    // Determine active heading based on scroll position
-    const observer = new IntersectionObserver(
-      (entries) => {
-        let visibleId = ''
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            visibleId = entry.target.id
-          }
-        })
-        if (visibleId) {
-          setActiveId(visibleId)
+    // Robust heading detection for both Product and Technical sections
+    const updateActiveHeading = () => {
+      const containerSelector = currentTab === 'product' ? '#project-product-content' : '#project-technical-content'
+      const container = document.querySelector(containerSelector)
+      const elements = container
+        ? Array.from(container.querySelectorAll<HTMLElement>('.prose h2, .prose h3, .prose h4'))
+        : Array.from(document.querySelectorAll<HTMLElement>('.prose h2, .prose h3, .prose h4'))
+
+      if (!elements.length) return
+
+      const triggerPoint = 140
+
+      let current = ''
+      for (let i = 0; i < elements.length; i++) {
+        const rect = elements[i].getBoundingClientRect()
+        if (rect.top <= triggerPoint) {
+          current = elements[i].id
+        } else {
+          break
         }
-      },
-      { rootMargin: '-10% 0px -80% 0px' }
-    )
+      }
 
-    // Observe all headings inside the prose article
-    const sectionElements = document.querySelectorAll('.prose h2, .prose h3, .prose h4')
-    sectionElements.forEach((el) => observer.observe(el))
+      if (current) {
+        setActiveId(current)
+      } else if (elements[0]?.id) {
+        setActiveId(elements[0].id)
+      }
+    }
 
-    return () => observer.disconnect()
-  }, [])
+    updateActiveHeading()
+
+    window.addEventListener('scroll', updateActiveHeading, { passive: true })
+    return () => window.removeEventListener('scroll', updateActiveHeading)
+  }, [currentTab])
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -154,12 +197,12 @@ export const MobileTOC = ({
     }
   }
 
-  const activeHeading = headings.find((h) => h.slug === activeId) || headings[0]
+  const activeHeading = activeHeadings.find((h) => h.slug === activeId) || activeHeadings[0]
   const radius = 8
   const circumference = 2 * Math.PI * radius
   const strokeDashoffset = circumference - (progress / 100) * circumference
 
-  if (!headings || headings.length === 0) return null
+  if (!activeHeadings || activeHeadings.length === 0) return null
 
   const shouldShowBar = !isAtEnd && !isIdle && !isOpen
 
@@ -276,7 +319,7 @@ export const MobileTOC = ({
                 </button>
               </div>
               <div className="overflow-y-auto p-6 flex flex-col gap-4 pb-safe">
-                {headings.map((heading, i) => {
+                {activeHeadings.map((heading, i) => {
                   const isActive = activeId === heading.slug
                   return (
                     <a

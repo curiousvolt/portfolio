@@ -1,18 +1,34 @@
 import { useState, useEffect } from 'react'
+import { getActiveRole, setActiveRole, type UserRole } from '@/lib/role'
 
 export const HeroKineticRole = () => {
   const [index, setIndex] = useState(0)
   const [animState, setAnimState] = useState<'idle' | 'exit' | 'enter'>('idle')
   const [drawTick, setDrawTick] = useState(0)
+  const [role, setRole] = useState<UserRole>('pe')
+
+  useEffect(() => {
+    setRole(getActiveRole())
+
+    const handleRoleChanged = (e: Event) => {
+      const customEvent = e as CustomEvent<{ role: UserRole }>
+      if (customEvent.detail?.role) {
+        setRole(customEvent.detail.role)
+      }
+    }
+
+    window.addEventListener('cv_role_changed', handleRoleChanged)
+    return () => window.removeEventListener('cv_role_changed', handleRoleChanged)
+  }, [])
 
   // Ordered so "build" loads first, then cycles through design and ship
   const verbs = [
     {
       id: 'build',
       text: 'build',
-      color: 'text-primary dark:text-primary',
-      pillBorder: 'border-primary/25',
-      pillBg: 'bg-primary/5',
+      color: 'text-primary',
+      pillBorder: 'border-border/70 hover:border-foreground/30',
+      pillBg: 'bg-secondary/30 hover:bg-secondary/60',
       renderSvg: (isActive: boolean) => (
         <svg 
           viewBox="0 0 24 24" 
@@ -60,13 +76,13 @@ export const HeroKineticRole = () => {
     {
       id: 'design',
       text: 'design',
-      color: 'text-pink-500 dark:text-pink-400',
-      pillBorder: 'border-pink-500/25',
-      pillBg: 'bg-pink-500/5',
+      color: 'text-primary',
+      pillBorder: 'border-border/70 hover:border-foreground/30',
+      pillBg: 'bg-secondary/30 hover:bg-secondary/60',
       renderSvg: (isActive: boolean) => (
         <svg 
           viewBox="0 0 24 24" 
-          className="w-3.5 h-3.5 text-pink-500 dark:text-pink-400 shrink-0 transition-transform duration-200 group-hover/pill:scale-110" 
+          className="w-3.5 h-3.5 text-primary shrink-0 transition-transform duration-200 group-hover/pill:scale-110" 
           fill="none" 
           stroke="currentColor" 
           strokeWidth="1.75" 
@@ -95,13 +111,13 @@ export const HeroKineticRole = () => {
     {
       id: 'ship',
       text: 'ship',
-      color: 'text-emerald-500 dark:text-emerald-400',
-      pillBorder: 'border-emerald-500/25',
-      pillBg: 'bg-emerald-500/5',
+      color: 'text-primary',
+      pillBorder: 'border-border/70 hover:border-foreground/30',
+      pillBg: 'bg-secondary/30 hover:bg-secondary/60',
       renderSvg: (isActive: boolean) => (
         <svg 
           viewBox="0 0 24 24" 
-          className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 shrink-0 transition-transform duration-200 group-hover/pill:scale-110" 
+          className="w-3.5 h-3.5 text-primary shrink-0 transition-transform duration-200 group-hover/pill:scale-110" 
           fill="none" 
           stroke="currentColor" 
           strokeWidth="1.75" 
@@ -143,7 +159,7 @@ export const HeroKineticRole = () => {
   ]
 
   useEffect(() => {
-    // 3.6s cycle: line draws and rests, then line retracts back before next builds
+    // Smooth readable cycle: line draws and rests, then line retracts before next builds
     const timer = setInterval(() => {
       // 1. Line goes back / retracts and word slides up
       setAnimState('exit')
@@ -157,10 +173,10 @@ export const HeroKineticRole = () => {
         requestAnimationFrame(() => {
           setTimeout(() => {
             setAnimState('idle')
-          }, 25)
+          }, 30)
         })
-      }, 280) // 280ms swift retract
-    }, 2400)
+      }, 300) // 300ms smooth retract
+    }, 2900)
 
     return () => clearInterval(timer)
   }, [verbs.length])
@@ -185,13 +201,13 @@ export const HeroKineticRole = () => {
       setIndex((prev) => (prev + 1) % verbs.length)
       setAnimState('enter')
       requestAnimationFrame(() => {
-        setTimeout(() => setAnimState('idle'), 25)
+        setTimeout(() => setAnimState('idle'), 30)
       })
-    }, 280)
+    }, 300)
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-start text-start gap-x-2 gap-y-1.5 py-0.5 animate-fade-in-up w-full">
+    <div className="flex flex-wrap items-center justify-start text-start gap-x-2 gap-y-1.5 py-0.5 w-full min-h-[28px]">
       {/* "i [pill] stuff" sentence */}
       <div className="inline-flex items-center gap-1.5 shrink-0">
         {/* Small lowercase "i" */}
@@ -233,11 +249,20 @@ export const HeroKineticRole = () => {
         aria-hidden="true" 
       />
 
-      {/* Product Engineer Role Badge */}
-      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary/60 hover:bg-secondary/90 text-foreground border border-border/40 text-[11.5px] sm:text-xs font-medium whitespace-nowrap shadow-2xs transition-colors duration-200 shrink-0">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-        Product Engineer
-      </div>
+      {/* Role Badge: Clean minimal pill matching website aesthetic */}
+      <button
+        type="button"
+        onClick={() => {
+          const nextRole: UserRole = role === 'pm' ? 'pe' : 'pm'
+          setRole(nextRole)
+          setActiveRole(nextRole)
+        }}
+        className="group/role inline-flex items-center px-2.5 py-0.5 rounded-full border border-border/70 hover:border-foreground/30 bg-secondary/30 hover:bg-secondary/60 text-foreground text-xs sm:text-[13px] font-medium tracking-tight shadow-2xs transition-colors duration-200 cursor-pointer select-none active:scale-95 focus:outline-hidden focus-visible:ring-1 focus-visible:ring-ring"
+        title={role === 'pm' ? 'Role: Product Manager (Click to switch to Product Engineer)' : 'Role: Product Engineer (Click to switch to Product Manager)'}
+        aria-label={role === 'pm' ? 'Switch to Product Engineer role' : 'Switch to Product Manager role'}
+      >
+        <span>{role === 'pm' ? 'Product Manager' : 'Product Engineer'}</span>
+      </button>
     </div>
   )
 }

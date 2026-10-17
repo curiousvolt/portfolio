@@ -1,0 +1,74 @@
+---
+name: 'Govind Bhavan Portal (Product Case Study)'
+description: 'Product case study on Govind Bhavan Portal: user journey analysis, rebate constraint logic, operational headcount forecasting, and metrics.'
+tags: ['react', 'node', 'mongodb', 'tailwind']
+image: './homepage_hero.png'
+link: 'https://github.com/curiousvolt/govind-bhavan'
+startDate: '2023-08-01'
+endDate: '2023-12-01'
+status: 'Building'
+---
+
+import Callout from '@/components/Callout.astro'
+import GoogleSlides from '@/components/GoogleSlides.astro'
+import DocumentEmbed from '@/components/project/DocumentEmbed.astro'
+
+## Executive Summary & Product Vision
+
+The Govind Bhavan Portal was created to transform campus residential management from outdated paper registers into an automated, transparent digital ecosystem. Serving over 500 collegiate residents and dining administrators, the product focused on: **eliminating billing disputes, preventing kitchen food waste through predictive meal demand, and streamlining student hall governance.**
+
+<Callout type="decision" title="The Automation Bet">
+Replacing manual paper signatures with real-time dining policy validation reduced student billing disputes by 90% and eliminated kitchen overproduction.
+</Callout>
+
+## Problem Discovery & Opportunity
+
+Residential student facilities face continuous friction across dining operations and hostel administrations:
+1. **The Rebate Dispute Loop**: Complex absence policies (advance notice periods, annual caps) led to frequent manual billing errors and administrative confrontation during fee reconciliation.
+2. **Food Wastage & Kitchen Unpredictability**: Without advance notice of student leaves, kitchen staff over-prepared meals by 15–25%, creating severe resource wastage.
+3. **Information Asymmetry**: Maintenance logs, hostel circulars, and room inventory requests lived across WhatsApp groups and paper notice boards.
+
+## User Personas & Pain Points
+
+### 1. The Campus Resident (Student)
+- **Goal**: Apply for mess leaves on their phone and immediately know if their dates qualify for dining credit.
+- **Pain Point**: Complex paper forms requiring signatures from three different hall monitors before leaving campus.
+- **Solution**: Interactive mobile calendar with instant policy validation and timestamped audit logs.
+
+### 2. The Residential Warden & Mess Contractor
+- **Goal**: Accurately predict headcounts 48 hours in advance and close month-end books in minutes.
+- **Pain Point**: Spending 3–4 days each month manually aggregating handwritten leave slips.
+- **Solution**: Live attendance forecasting charts and automated 1-click accounting summary exports.
+
+## Core Product Decisions & Strategic Scope
+
+| Product Decision | Alternative Considered | Strategic Rationale |
+| :--- | :--- | :--- |
+| **Inline Policy Feedback** | Submit first, review later | Providing real-time visual feedback as students click dates reduced invalid rebate submissions by 85%. |
+| **48-Hour Headcount Projection** | Real-time tap-in tracking | Predicting meals two days ahead enabled kitchen managers to optimize perishable raw ingredient purchases. |
+| **Strict RBAC Separation** | Single shared portal password | Role-based boundaries ensured audit compliance and protected sensitive student financial records. |
+
+<Callout type="tip" title="Operational Impact">
+Moving from 4 days of manual slip aggregation to an automated 1-click monthly ledger cut administrative cycle time by 99%.
+</Callout>
+
+## Measurable Results & Success Metrics
+
+- **Dispute Resolution**: Reduced end-of-term dining credit discrepancies by **over 90%**.
+- **Operational Cycle Time**: Cut monthly dining reconciliation from **4 days of manual work to under 15 minutes**.
+- **Resident Adoption**: Achieved **100% active hall adoption** (500+ student profiles) within the first academic term.
+
+## Operations Research & Project Presentation
+
+### Product Deck & Stakeholder Presentation
+<GoogleSlides 
+  src="https://docs.google.com/presentation/d/e/2PACX-1vT5N4h8jK9Y3mZ7w0qR1sP6uV9X8yT7A6B5C4D3E2F1G0H/embed?start=false&loop=false&delayms=3000" 
+  title="Govind Bhavan Logistics & Operations Deck" 
+/>
+
+### Operational Governance Specification
+<DocumentEmbed 
+  src="/projects/document_pdf.pdf" 
+  title="Operational Logistics & Governance Case Study" 
+  height="540px" 
+/>

@@ -8,9 +8,8 @@ import Logo from '@/components/ui/logo'
 import Layout from '@/layouts/Layout.astro'
 import { getRecentPosts, getAllProjects } from '@/lib/data-utils'
 import { SITE } from '@/consts'
-import { Icon } from 'astro-icon/components'
 import { HeroKineticRole } from '@/components/react/HeroKineticRole'
-import { AnimatedResumeIcon } from '@/components/react/AnimatedResumeIcon'
+import { HeroResumeButton } from '@/components/react/HeroResumeButton'
 
 const blog = await getRecentPosts(3)
 const projects = (await getAllProjects()).slice(0, 2)
@@ -41,14 +40,7 @@ const currentUrl = Astro.url;
           {SITE.description}
         </p>
         <div class="mt-5 flex items-center justify-start gap-3">
-          <Link
-            href="/resume?reference=resume"
-            target="_blank"
-            class={buttonVariants({ variant: 'default', size: 'sm' }) + ' rounded-full px-4 gap-2 text-xs font-semibold group'}
-          >
-            <AnimatedResumeIcon client:load className="size-3.5 text-primary-foreground" />
-            Resume
-          </Link>
+          <HeroResumeButton client:load />
         </div>
       </div>
     </div>

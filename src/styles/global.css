@@ -183,9 +183,14 @@
   html {
     @apply bg-background text-foreground scheme-light;
     scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklch, var(--foreground) 22%, transparent) transparent;
+    overflow-x: clip;
+    max-width: 100%;
 
     &.dark {
       @apply scheme-dark;
+      scrollbar-color: color-mix(in oklch, var(--foreground) 25%, transparent) transparent;
     }
 
     ::-webkit-scrollbar-corner {
@@ -193,12 +198,41 @@
     }
   }
 
+  body {
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
+  /* Global sleek scrollbar for Windows/Blink/WebKit browsers */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklch, var(--foreground) 20%, transparent);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    transition: background-color 0.2s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklch, var(--primary) 70%, transparent);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
   .disable-transitions * {
     @apply !transition-none;
   }
 
   body {
-    @apply font-sans text-base leading-normal;
+    @apply font-sans text-[16.5px] sm:text-[17px] 2xl:text-[18px] leading-relaxed;
   }
 
   h1,
@@ -207,7 +241,7 @@
   h4,
   h5,
   h6 {
-    @apply text-foreground font-bold tracking-normal;
+    @apply text-foreground font-bold tracking-tight;
   }
 
   a {
@@ -280,7 +314,7 @@
 
   .group:hover .draw-icon,
   .draw-icon:hover {
-    animation: draw 0.4s cubic-bezier(0.2, 0, 0, 1) forwards;
+    animation: draw 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
 
   @keyframes resumeDocDraw {
@@ -341,6 +375,22 @@
     }
   }
 
+  .group:hover .resume-doc {
+    animation: resumeDocDrawSmooth 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+  }
+  .group:hover .resume-fold {
+    animation: resumeFoldDrawSmooth 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards !important;
+  }
+  .group:hover .resume-line-1 {
+    animation: resumeLineDrawSmooth 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.15s forwards !important;
+  }
+  .group:hover .resume-line-2 {
+    animation: resumeLineDrawSmooth 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.22s forwards !important;
+  }
+  .group:hover .resume-line-3 {
+    animation: resumeLineDrawSmooth 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards !important;
+  }
+
   .animate-fade-in-up {
     animation: fade-in-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
@@ -368,5 +418,25 @@
 
   .delay-500 {
     animation-delay: 500ms;
+  }
+
+  /* Scoped extra-compact scrollbar utility */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklch, var(--foreground) 22%, transparent) transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: color-mix(in oklch, var(--foreground) 20%, transparent);
+    border-radius: 9999px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklch, var(--primary) 70%, transparent);
   }
 }

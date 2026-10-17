@@ -73,5 +73,12 @@ const {
       <SpeedInsights />
       <Analytics />
     </div>
+    <script>
+      import { initAnalytics } from '@/lib/analytics'
+      initAnalytics()
+      document.addEventListener('astro:page-load', () => {
+        initAnalytics()
+      })
+    </script>
   </body>
 </html>
