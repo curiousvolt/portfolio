@@ -10,6 +10,7 @@ import { getRecentPosts, getAllProjects } from '@/lib/data-utils'
 import { SITE } from '@/consts'
 import { Icon } from 'astro-icon/components'
 import { HeroKineticRole } from '@/components/react/HeroKineticRole'
+import { AnimatedResumeIcon } from '@/components/react/AnimatedResumeIcon'
 
 const blog = await getRecentPosts(3)
 const projects = (await getAllProjects()).slice(0, 2)
@@ -45,7 +46,7 @@ const currentUrl = Astro.url;
             target="_blank"
             class={buttonVariants({ variant: 'default', size: 'sm' }) + ' rounded-full px-4 gap-2 text-xs font-semibold group'}
           >
-            <Icon name="lucide:file-text" class="size-3.5 transition-transform group-hover:scale-110" />
+            <AnimatedResumeIcon client:load className="size-3.5 text-primary-foreground" />
             Resume
           </Link>
         </div>

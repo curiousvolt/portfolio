@@ -5,7 +5,8 @@ import { MediaCard } from './media-card'
 import { SITE } from '@/consts'
 import type { GitHubRepo } from '@/consts'
 import type { CollectionEntry } from 'astro:content'
-import { Folder, Github, Mail, FileText, Star, GitFork, Linkedin } from 'lucide-react'
+import { Folder, Github, Mail, Star, GitFork, Linkedin } from 'lucide-react'
+import { AnimatedResumeIcon } from './AnimatedResumeIcon'
 
 export const AboutContent = ({ 
   initialGraphSvg, 
@@ -100,7 +101,7 @@ export const AboutContent = ({
           rel="noopener noreferrer"
           className="group flex items-center gap-2 px-6 py-2.5 border border-border/50 bg-secondary/30 hover:bg-secondary text-foreground text-sm font-bold rounded-full transition-all duration-300 shadow-2xs"
         >
-          <FileText size={16} className="text-primary group-hover:scale-110 transition-transform" />
+          <AnimatedResumeIcon size={16} className="text-primary group-hover:scale-110 transition-transform" />
           Download Resume
         </a>
         <a

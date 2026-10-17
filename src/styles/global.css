@@ -283,6 +283,47 @@
     animation: draw 1.5s ease-in-out forwards;
   }
 
+  @keyframes resumeDocDraw {
+    0% {
+      stroke-dashoffset: 70;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes resumeFoldDraw {
+    0% {
+      stroke-dashoffset: 14;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes resumeLineDraw {
+    0% {
+      stroke-dashoffset: 14;
+      opacity: 0.2;
+    }
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+  }
+
+  .group:hover .resume-line-1 {
+    animation: resumeLineDraw 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.05s forwards !important;
+  }
+
+  .group:hover .resume-line-2 {
+    animation: resumeLineDraw 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.15s forwards !important;
+  }
+
+  .group:hover .resume-line-3 {
+    animation: resumeLineDraw 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.25s forwards !important;
+  }
+
   .animate-fade-in-up {
     animation: fade-in-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   }

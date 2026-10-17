@@ -178,9 +178,9 @@ export const HeroKineticRole = () => {
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2 py-0.5 animate-fade-in-up">
+    <div className="inline-flex flex-wrap items-center gap-x-2 gap-y-1.5 py-0.5 animate-fade-in-up">
       {/* "i [pill] stuff" sentence */}
-      <div className="inline-flex items-center gap-1.5">
+      <div className="inline-flex items-center gap-1.5 shrink-0">
         {/* Small lowercase "i" */}
         <span className="text-xs sm:text-sm font-medium text-foreground/80 pl-0.5 select-none">
           i
@@ -211,10 +211,14 @@ export const HeroKineticRole = () => {
         </span>
       </div>
 
-      <span className="text-muted-foreground/40 text-xs hidden sm:inline">&bull;</span>
+      {/* Sleek, centered dot separator - visible on both mobile and desktop */}
+      <span 
+        className="w-1 h-1 rounded-full bg-foreground/30 dark:bg-foreground/40 shrink-0 select-none mx-0.5" 
+        aria-hidden="true" 
+      />
 
       {/* Product Engineer Role Badge */}
-      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary/60 hover:bg-secondary/90 text-foreground border border-border/40 text-[11.5px] sm:text-xs font-medium whitespace-nowrap shadow-2xs transition-colors duration-200">
+      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary/60 hover:bg-secondary/90 text-foreground border border-border/40 text-[11.5px] sm:text-xs font-medium whitespace-nowrap shadow-2xs transition-colors duration-200 shrink-0">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
         Product Engineer
       </div>
