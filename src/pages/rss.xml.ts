@@ -22,8 +22,8 @@ export const GET: APIRoute = async ({ site }) => {
         <language>${SITE.locale || 'en-us'}</language>
         <lastBuildDate>${lastBuildDate.toUTCString()}</lastBuildDate>
         <ttl>60</ttl>
-        <managingEditor>${SITE.author} (${SITE.email || 'contact@curiousvolt.me'})</managingEditor>
-        <webMaster>${SITE.author} (${SITE.email || 'contact@curiousvolt.me'})</webMaster>
+        <managingEditor>${SITE.author} (${SITE.email})</managingEditor>
+        <webMaster>${SITE.author} (${SITE.email})</webMaster>
         <image>
           <url>${new URL('/ogImage.png', site ?? SITE.href).href}</url>
           <title>${SITE.title}</title>

@@ -35,9 +35,10 @@ export const POST: APIRoute = async ({ params, request }) => {
   // SECURITY CHECK: Validate origin/referer to prevent CSRF attacks
   const origin = request.headers.get('origin');
   const allowedOrigins = [
-    'https://curiousvolt.me',  // Replace with your actual domain
-    'http://localhost:3000',   // For local development
-    'https://www.curiousvolt.me', // Replace with your actual domain
+    'https://curiousvolt.is-a.dev',
+    'https://www.curiousvolt.is-a.dev',
+    'http://localhost:3000',
+    'http://localhost:3010',
   ];
 
   if (!origin || !allowedOrigins.includes(origin)) {

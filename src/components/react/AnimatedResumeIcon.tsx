@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 interface AnimatedResumeIconProps {
   className?: string
@@ -6,19 +6,29 @@ interface AnimatedResumeIconProps {
 }
 
 export const AnimatedResumeIcon = ({ className = 'w-3.5 h-3.5', size = 16 }: AnimatedResumeIconProps) => {
-  const [cycle, setCycle] = useState(0)
+  const [animKey, setAnimKey] = useState(0)
+  const svgRef = useRef<SVGSVGElement>(null)
 
-  // Periodically re-trigger the smooth line-drawing animation every 5.5s
+  // Listen on parent interactive container (.group, button, <a>) so hover restarts EVERY TIME
+  // No automatic periodic interval - only animates when hovered ("whn i hover then only")
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCycle((prev) => prev + 1)
-    }, 5500)
-    return () => clearInterval(timer)
+    const el = svgRef.current?.closest('a, button, .group') || svgRef.current
+    if (!el) return
+
+    const handleEnter = () => {
+      setAnimKey((prev) => prev + 1)
+    }
+
+    el.addEventListener('mouseenter', handleEnter)
+    return () => el.removeEventListener('mouseenter', handleEnter)
   }, [])
+
+  const isAnimating = animKey > 0
 
   return (
     <svg
-      key={cycle}
+      ref={svgRef}
+      key={animKey}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       width={size}
@@ -28,55 +38,52 @@ export const AnimatedResumeIcon = ({ className = 'w-3.5 h-3.5', size = 16 }: Ani
       strokeWidth="1.85"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={`shrink-0 transition-transform duration-300 group-hover:scale-110 ${className}`}
+      className={`shrink-0 transition-transform duration-250 group-hover:scale-110 ${className}`}
       aria-hidden="true"
     >
-      {/* Document page outline - draws on mount/cycle */}
+      {/* Document page outline - smooth draw on hover */}
       <path
         d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-        style={{
+        style={isAnimating ? {
           strokeDasharray: 70,
-          animation: 'resumeDocDraw 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards'
-        }}
+          animation: 'resumeDocDrawSmooth 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards'
+        } : undefined}
       />
 
       {/* Folded corner tab */}
       <path
         d="M14 2v6h6"
-        style={{
+        style={isAnimating ? {
           strokeDasharray: 14,
-          animation: 'resumeFoldDraw 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards'
-        }}
+          animation: 'resumeFoldDrawSmooth 0.28s cubic-bezier(0.4, 0, 0.2, 1) 0.12s forwards'
+        } : undefined}
       />
 
       {/* Title / Heading line */}
       <path
         d="M10 9H8"
-        className="resume-line-1"
-        style={{
+        style={isAnimating ? {
           strokeDasharray: 6,
-          animation: 'resumeLineDraw 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards'
-        }}
+          animation: 'resumeLineDrawSmooth 0.22s cubic-bezier(0.4, 0, 0.2, 1) 0.18s forwards'
+        } : undefined}
       />
 
       {/* Summary line 1 */}
       <path
         d="M16 13H8"
-        className="resume-line-2"
-        style={{
+        style={isAnimating ? {
           strokeDasharray: 14,
-          animation: 'resumeLineDraw 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.65s forwards'
-        }}
+          animation: 'resumeLineDrawSmooth 0.28s cubic-bezier(0.4, 0, 0.2, 1) 0.26s forwards'
+        } : undefined}
       />
 
       {/* Experience line 2 */}
       <path
         d="M16 17H8"
-        className="resume-line-3"
-        style={{
+        style={isAnimating ? {
           strokeDasharray: 14,
-          animation: 'resumeLineDraw 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.8s forwards'
-        }}
+          animation: 'resumeLineDrawSmooth 0.28s cubic-bezier(0.4, 0, 0.2, 1) 0.36s forwards'
+        } : undefined}
       />
     </svg>
   )

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 export const HeroKineticRole = () => {
   const [index, setIndex] = useState(0)
   const [animState, setAnimState] = useState<'idle' | 'exit' | 'enter'>('idle')
+  const [drawTick, setDrawTick] = useState(0)
 
   // Ordered so "build" loads first, then cycles through design and ship
   const verbs = [
@@ -15,7 +16,7 @@ export const HeroKineticRole = () => {
       renderSvg: (isActive: boolean) => (
         <svg 
           viewBox="0 0 24 24" 
-          className="w-3.5 h-3.5 text-primary shrink-0" 
+          className="w-3.5 h-3.5 text-primary shrink-0 transition-transform duration-200 group-hover/pill:scale-110" 
           fill="none" 
           stroke="currentColor" 
           strokeWidth="1.75" 
@@ -29,8 +30,8 @@ export const HeroKineticRole = () => {
               strokeDasharray: 45,
               strokeDashoffset: isActive ? 0 : 45,
               transition: isActive 
-                ? 'stroke-dashoffset 1.1s cubic-bezier(0.4, 0, 0.2, 1)' 
-                : 'stroke-dashoffset 0.45s cubic-bezier(0.4, 0, 0.2, 1)'
+                ? 'stroke-dashoffset 0.45s cubic-bezier(0.2, 0, 0, 1)' 
+                : 'stroke-dashoffset 0.22s cubic-bezier(0.2, 0, 0, 1)'
             }}
           />
           <path 
@@ -39,8 +40,8 @@ export const HeroKineticRole = () => {
               strokeDasharray: 55,
               strokeDashoffset: isActive ? 0 : 55,
               transition: isActive 
-                ? 'stroke-dashoffset 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s' 
-                : 'stroke-dashoffset 0.45s cubic-bezier(0.4, 0, 0.2, 1)'
+                ? 'stroke-dashoffset 0.45s cubic-bezier(0.2, 0, 0, 1) 0.06s' 
+                : 'stroke-dashoffset 0.22s cubic-bezier(0.2, 0, 0, 1)'
             }}
           />
           <path 
@@ -49,8 +50,8 @@ export const HeroKineticRole = () => {
               strokeDasharray: 12,
               strokeDashoffset: isActive ? 0 : 12,
               transition: isActive 
-                ? 'stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s' 
-                : 'stroke-dashoffset 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                ? 'stroke-dashoffset 0.25s cubic-bezier(0.2, 0, 0, 1) 0.12s' 
+                : 'stroke-dashoffset 0.15s cubic-bezier(0.2, 0, 0, 1)'
             }}
           />
         </svg>
@@ -65,7 +66,7 @@ export const HeroKineticRole = () => {
       renderSvg: (isActive: boolean) => (
         <svg 
           viewBox="0 0 24 24" 
-          className="w-3.5 h-3.5 text-pink-500 dark:text-pink-400 shrink-0" 
+          className="w-3.5 h-3.5 text-pink-500 dark:text-pink-400 shrink-0 transition-transform duration-200 group-hover/pill:scale-110" 
           fill="none" 
           stroke="currentColor" 
           strokeWidth="1.75" 
@@ -79,15 +80,15 @@ export const HeroKineticRole = () => {
               strokeDasharray: 80,
               strokeDashoffset: isActive ? 0 : 80,
               transition: isActive 
-                ? 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)' 
-                : 'stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+                ? 'stroke-dashoffset 0.45s cubic-bezier(0.2, 0, 0, 1)' 
+                : 'stroke-dashoffset 0.22s cubic-bezier(0.2, 0, 0, 1)'
             }}
           />
-          {/* Paint dots: fade in sequentially when active, fade out quickly on exit */}
-          <circle cx="13.5" cy="6.5" r=".7" fill="currentColor" style={{ opacity: isActive ? 1 : 0, transition: isActive ? 'opacity 0.5s ease 0.5s' : 'opacity 0.2s ease' }} />
-          <circle cx="17.5" cy="10.5" r=".7" fill="currentColor" style={{ opacity: isActive ? 1 : 0, transition: isActive ? 'opacity 0.5s ease 0.7s' : 'opacity 0.2s ease' }} />
-          <circle cx="6.5" cy="12.5" r=".7" fill="currentColor" style={{ opacity: isActive ? 1 : 0, transition: isActive ? 'opacity 0.5s ease 0.9s' : 'opacity 0.2s ease' }} />
-          <circle cx="8.5" cy="7.5" r=".7" fill="currentColor" style={{ opacity: isActive ? 1 : 0, transition: isActive ? 'opacity 0.5s ease 1.1s' : 'opacity 0.2s ease' }} />
+          {/* Paint dots: fade in smoothly when active */}
+          <circle cx="13.5" cy="6.5" r=".7" fill="currentColor" style={{ opacity: isActive ? 1 : 0, transition: isActive ? 'opacity 0.25s ease 0.15s' : 'opacity 0.1s ease' }} />
+          <circle cx="17.5" cy="10.5" r=".7" fill="currentColor" style={{ opacity: isActive ? 1 : 0, transition: isActive ? 'opacity 0.25s ease 0.22s' : 'opacity 0.1s ease' }} />
+          <circle cx="6.5" cy="12.5" r=".7" fill="currentColor" style={{ opacity: isActive ? 1 : 0, transition: isActive ? 'opacity 0.25s ease 0.29s' : 'opacity 0.1s ease' }} />
+          <circle cx="8.5" cy="7.5" r=".7" fill="currentColor" style={{ opacity: isActive ? 1 : 0, transition: isActive ? 'opacity 0.25s ease 0.36s' : 'opacity 0.1s ease' }} />
         </svg>
       )
     },
@@ -100,7 +101,7 @@ export const HeroKineticRole = () => {
       renderSvg: (isActive: boolean) => (
         <svg 
           viewBox="0 0 24 24" 
-          className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 shrink-0" 
+          className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 shrink-0 transition-transform duration-200 group-hover/pill:scale-110" 
           fill="none" 
           stroke="currentColor" 
           strokeWidth="1.75" 
@@ -114,8 +115,8 @@ export const HeroKineticRole = () => {
               strokeDasharray: 65,
               strokeDashoffset: isActive ? 0 : 65,
               transition: isActive 
-                ? 'stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1)' 
-                : 'stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1)'
+                ? 'stroke-dashoffset 0.45s cubic-bezier(0.2, 0, 0, 1)' 
+                : 'stroke-dashoffset 0.22s cubic-bezier(0.2, 0, 0, 1)'
             }}
           />
           <path 
@@ -124,17 +125,17 @@ export const HeroKineticRole = () => {
               strokeDasharray: 25,
               strokeDashoffset: isActive ? 0 : 25,
               transition: isActive 
-                ? 'stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s' 
-                : 'stroke-dashoffset 0.35s cubic-bezier(0.4, 0, 0.2, 1)'
+                ? 'stroke-dashoffset 0.35s cubic-bezier(0.2, 0, 0, 1) 0.08s' 
+                : 'stroke-dashoffset 0.18s cubic-bezier(0.2, 0, 0, 1)'
             }}
           />
           <path 
             d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" 
-            style={{ opacity: isActive ? 1 : 0, transition: isActive ? 'opacity 0.5s ease 0.6s' : 'opacity 0.2s ease' }} 
+            style={{ opacity: isActive ? 1 : 0, transition: isActive ? 'opacity 0.25s ease 0.18s' : 'opacity 0.1s ease' }} 
           />
           <path 
             d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" 
-            style={{ opacity: isActive ? 1 : 0, transition: isActive ? 'opacity 0.5s ease 0.8s' : 'opacity 0.2s ease' }} 
+            style={{ opacity: isActive ? 1 : 0, transition: isActive ? 'opacity 0.25s ease 0.24s' : 'opacity 0.1s ease' }} 
           />
         </svg>
       )
@@ -142,13 +143,13 @@ export const HeroKineticRole = () => {
   ]
 
   useEffect(() => {
-    // 4.2s cycle: line draws and rests, then line retracts back before next builds
+    // 3.6s cycle: line draws and rests, then line retracts back before next builds
     const timer = setInterval(() => {
       // 1. Line goes back / retracts and word slides up
       setAnimState('exit')
 
       setTimeout(() => {
-        // 2. After line has cleanly retracted back, set next verb positioned below
+        // 2. Set next verb positioned below
         setIndex((prev) => (prev + 1) % verbs.length)
         setAnimState('enter')
 
@@ -156,10 +157,10 @@ export const HeroKineticRole = () => {
         requestAnimationFrame(() => {
           setTimeout(() => {
             setAnimState('idle')
-          }, 35)
+          }, 25)
         })
-      }, 520) // 520ms gives full time for the stroke to retract back
-    }, 4200)
+      }, 280) // 280ms swift retract
+    }, 2400)
 
     return () => clearInterval(timer)
   }, [verbs.length])
@@ -177,8 +178,20 @@ export const HeroKineticRole = () => {
     motionClass = 'translate-y-3 opacity-0 transition-none'
   }
 
+  const handlePillClick = () => {
+    // Immediate manual advance on click
+    setAnimState('exit')
+    setTimeout(() => {
+      setIndex((prev) => (prev + 1) % verbs.length)
+      setAnimState('enter')
+      requestAnimationFrame(() => {
+        setTimeout(() => setAnimState('idle'), 25)
+      })
+    }, 280)
+  }
+
   return (
-    <div className="inline-flex flex-wrap items-center gap-x-2 gap-y-1.5 py-0.5 animate-fade-in-up">
+    <div className="flex flex-wrap items-center justify-start text-start gap-x-2 gap-y-1.5 py-0.5 animate-fade-in-up w-full">
       {/* "i [pill] stuff" sentence */}
       <div className="inline-flex items-center gap-1.5 shrink-0">
         {/* Small lowercase "i" */}
@@ -186,26 +199,29 @@ export const HeroKineticRole = () => {
           i
         </span>
 
-        {/* Compact, clean Pill hugging contents with balanced padding */}
+        {/* Stable-width Pill: prevents "stuff" from shifting or jittering */}
         <div 
-          className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border shadow-2xs backdrop-blur-xs transition-all duration-300 ${current.pillBg} ${current.pillBorder}`}
+          onClick={handlePillClick}
+          onMouseEnter={() => setDrawTick((prev) => prev + 1)}
+          className={`group/pill inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border shadow-2xs backdrop-blur-xs transition-colors duration-300 cursor-pointer select-none ${current.pillBg} ${current.pillBorder}`}
+          title="Click to cycle next verb"
         >
-          {/* Animated SVG (draws in, then retracts line back on exit) */}
-          <div className="w-3.5 h-3.5 flex items-center justify-center shrink-0">
+          {/* Animated SVG (draws in, then retracts line back on exit; replays on every hover) */}
+          <div key={`${index}-${drawTick}`} className="w-3.5 h-3.5 flex items-center justify-center shrink-0">
             {current.renderSvg(animState === 'idle')}
           </div>
 
-          {/* Kinetic Text container: hugs text with no extra trailing gap */}
-          <div className="h-4 overflow-hidden flex items-center">
+          {/* Kinetic Text container: fixed width slot (w-[38px] sm:w-[42px]) keeps 'stuff' 100% stationary */}
+          <div className="h-4 overflow-hidden flex items-center justify-center w-[38px] sm:w-[42px] shrink-0">
             <span 
-              className={`text-[11.5px] sm:text-xs font-semibold tracking-tight transition-all duration-350 transform ${motionClass} ${current.color}`}
+              className={`text-[11.5px] sm:text-xs font-semibold tracking-tight transition-all duration-300 transform ${motionClass} ${current.color} w-full text-center inline-block`}
             >
               {current.text}
             </span>
           </div>
         </div>
 
-        {/* "stuff" */}
+        {/* "stuff" - stays completely still, 0 jitter */}
         <span className="text-xs sm:text-sm font-medium text-foreground/90 select-none">
           stuff
         </span>

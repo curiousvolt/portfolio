@@ -11,6 +11,7 @@ import { Image } from 'astro:assets'
 import { render } from 'astro:content'
 import PageHead from '@/components/PageHead.astro'
 import { MobileTOC } from '@/components/react/MobileTOC'
+import { SITE } from '@/consts'
 
 export async function getStaticPaths() {
   const projects = await getAllProjects()
@@ -31,9 +32,9 @@ const structuredData = {
   dateModified: project.data.endDate || project.data.startDate || '',
   author: {
     '@type': 'Person',
-    name: 'Author',
+    name: SITE.author,
   },
-  image: new URL(`/image/${project.id}.png`, Astro.site).toString(),
+  image: new URL(`/image/${project.id}.png`, Astro.site || SITE.href).toString(),
   keywords: project.data.tags ? project.data.tags.join(', ') : '',
   description: project.data.description || '',
 }

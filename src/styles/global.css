@@ -280,7 +280,7 @@
 
   .group:hover .draw-icon,
   .draw-icon:hover {
-    animation: draw 1.5s ease-in-out forwards;
+    animation: draw 0.4s cubic-bezier(0.2, 0, 0, 1) forwards;
   }
 
   @keyframes resumeDocDraw {
@@ -312,16 +312,33 @@
     }
   }
 
-  .group:hover .resume-line-1 {
-    animation: resumeLineDraw 0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.05s forwards !important;
+  @keyframes resumeDocDrawSmooth {
+    0% {
+      stroke-dashoffset: 70;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
   }
 
-  .group:hover .resume-line-2 {
-    animation: resumeLineDraw 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.15s forwards !important;
+  @keyframes resumeFoldDrawSmooth {
+    0% {
+      stroke-dashoffset: 14;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
   }
 
-  .group:hover .resume-line-3 {
-    animation: resumeLineDraw 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.25s forwards !important;
+  @keyframes resumeLineDrawSmooth {
+    0% {
+      stroke-dashoffset: 14;
+      opacity: 0.15;
+    }
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
   }
 
   .animate-fade-in-up {

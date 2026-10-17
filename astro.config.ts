@@ -46,7 +46,7 @@ function rehypeDemoteH1AndStripTitle() {
 }
 
 export default defineConfig({
-  site: 'https://www.curiousvolt.me',
+  site: 'https://www.curiousvolt.is-a.dev',
 
   redirects: {
     '/resume': '/resume.pdf',

@@ -34,13 +34,13 @@ const currentUrl = Astro.url;
         >
           {SITE.author}
         </h1>
-        <div class="mt-4 w-full">
+        <div class="mt-4 w-full flex justify-start text-start">
           <HeroKineticRole client:load />
         </div>
         <p class="text-md text-foreground mt-4 text-start font-sans whitespace-normal break-words" title="description" aria-label="description">
           {SITE.description}
         </p>
-        <div class="mt-5 flex items-center gap-3">
+        <div class="mt-5 flex items-center justify-start gap-3">
           <Link
             href="/resume?reference=resume"
             target="_blank"
