@@ -9,7 +9,7 @@ const BlogCardJSX = ({ entry, variant = "list" }: { entry: CollectionEntry<'blog
     return (
       <a
         href={`/${entry.collection}/${entry.id}`}
-        className="flex flex-col h-full w-full rounded-2xl overflow-hidden bg-card hover:shadow-lg transition-all duration-300 border border-border/60 hover:border-border"
+        className="flex flex-col w-full rounded-2xl overflow-hidden bg-card hover:shadow-lg transition-all duration-300 border border-border/60 hover:border-border"
       >
         <div className="aspect-[16/10] w-full overflow-hidden">
           <img
@@ -20,14 +20,14 @@ const BlogCardJSX = ({ entry, variant = "list" }: { entry: CollectionEntry<'blog
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
-        <div className="flex flex-col justify-between p-5 flex-grow">
+        <div className="flex flex-col p-5">
           <div>
-            <h3 className="text-xl font-medium text-foreground mb-2">{entry.data.title}</h3>
-            <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
+            <h3 className="text-xl font-medium text-foreground mb-2 group-hover:text-primary transition-colors duration-200">{entry.data.title}</h3>
+            <p className="text-sm text-muted-foreground line-clamp-2">
               {entry.data.description}
             </p>
           </div>
-          <div className="flex flex-wrap justify-between items-center mt-auto pt-3 border-t border-border/40">
+          <div className="flex flex-wrap justify-between items-center mt-3.5 pt-3 border-t border-border/40">
             {entry.data.tags && (
               <div className="flex flex-wrap gap-2">
                 {entry.data.tags.slice(0, 2).map((tag, index) => (

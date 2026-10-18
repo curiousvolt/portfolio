@@ -94,7 +94,7 @@ function Search({ searchList, initialPosts }) {
       <div className="mt-6">
         <ul className="grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 mb-6">
           {filteredPosts.slice(0, 50).map((post, index) => (
-            <li key={post.id || post.slug || index} className="group h-full w-full transition-all duration-300 hover:translate-y-[-4px]">
+            <li key={post.id || post.slug || index} className="group w-full transition-all duration-300 hover:translate-y-[-4px]">
               <BlogCardJSX entry={post} variant="grid" />
             </li>
           ))}
