@@ -9,7 +9,7 @@ const BlogCardJSX = ({ entry, variant = "list" }: { entry: CollectionEntry<'blog
     return (
       <a
         href={`/${entry.collection}/${entry.id}`}
-        className="flex flex-col h-full w-full rounded-2xl overflow-hidden bg-card hover:shadow-lg transition-all duration-300 border border-card-foreground/10"
+        className="flex flex-col h-full w-full rounded-2xl overflow-hidden bg-card hover:shadow-lg transition-all duration-300 border border-border/60 hover:border-border"
       >
         <div className="aspect-[16/10] w-full overflow-hidden">
           <img
